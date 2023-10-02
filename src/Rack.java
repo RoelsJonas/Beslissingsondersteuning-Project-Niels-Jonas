@@ -51,7 +51,7 @@ public class Rack {
     public String toString(){
         StringBuilder sb = new StringBuilder();
         sb.append("--id: "+ ID +"-------------------------------------");
-        sb.append("\n\t Stack:");
+        sb.append("\n\t\t Stack:");
         for (Box box : stack) {
             sb.append(box.toString() + " | ");
         }
