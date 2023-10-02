@@ -20,4 +20,9 @@ public class TransportRequest {
     public int getDropOffLocation() {
         return dropOffLocation;
     }
+
+    
+    public String toString(){
+        return boxId + " from " + pickupLocation + " -> " + dropOffLocation;
+    }
 }

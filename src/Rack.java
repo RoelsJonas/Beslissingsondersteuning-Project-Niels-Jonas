@@ -1,14 +1,15 @@
 import java.util.Stack;
 
 public class Rack {
-    private int id;
+    private int ID;
+    private int MAX_CAPACITY;
+
     private int x;
     private int y;
-    private int MAX_CAPACITY;
     private Stack<Box> stack;
 
-    public Rack(int id, int x, int y, int MAX_CAPACITY) {
-        this.id = id;
+    public Rack(int ID, int x, int y, int MAX_CAPACITY) {
+        this.ID = ID;
         this.x = x;
         this.y = y;
         this.MAX_CAPACITY = MAX_CAPACITY;
@@ -36,7 +37,7 @@ public class Rack {
             stack.addAll(boxes);
         }
 
-        else throw new RackException("Rack " + id + " is too full to fit boxes");
+        else throw new RackException("Rack " + ID + " is too full to fit boxes");
     }
 
     public void addBoxes(Box box) throws RackException {
@@ -44,7 +45,18 @@ public class Rack {
             stack.add(box);
         }
 
-        else throw new RackException("Rack " + id + " is Full");
+        else throw new RackException("Rack " + ID + " is Full");
+    }
+
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("--id: "+ ID +"-------------------------------------");
+        sb.append("\n Stack:");
+        for (Box box : stack) {
+            sb.append(box.getId() + " | ");
+        }
+        
+        return sb.toString();
     }
 }
 

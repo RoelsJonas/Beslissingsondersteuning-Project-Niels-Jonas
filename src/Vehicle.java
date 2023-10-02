@@ -62,6 +62,23 @@ public class Vehicle {
         requests.remove(i);    
     }
     
+
+    
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("--id: "+ ID +"-------------------------------------");
+        sb.append("\n Stack:");
+        for (Box box : stack) {
+            sb.append(box.getId() + " | ");
+        }
+        
+        sb.append("\n Requests:");
+        for (TransportRequest request : requests) {
+            sb.append("\t" + request.toString());
+        }
+
+        return sb.toString();
+    }
 }
 
 class VehicleException extends Exception{
