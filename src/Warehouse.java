@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -34,10 +35,33 @@ public class Warehouse {
     }
 
     public void addBox(int boxID, int rackID) throws RackException {
-        racks[rackID].addBoxes(new Box(boxID));
+        Box b = new Box(boxID);
+        racks[rackID].addBoxes(b);
+        inventory.put(b, racks[rackID]);
     }
 
     public void addRequest(int boxId, int pickUpLocation, int dropOffLocation) {
         requests.add(new TransportRequest(boxId, pickUpLocation, dropOffLocation));
+    }
+
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        Object[] boxes = buffer.toArray();
+        sb.append("Buffer: \n");
+        for(Object b : boxes)
+            sb.append("\t - " + b + "\n");
+
+        sb.append("\n Racks: \n");
+        for(Rack r : racks)
+            sb.append("\t  - " + r + "\n");
+
+        sb.append("\n Vehicles: \n");
+        for(Vehicle v : vehicles)
+            sb.append("\t - " + v + "\n");
+
+        return sb.toString();
     }
 }
