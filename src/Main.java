@@ -6,6 +6,8 @@ public class Main {
         w.addBox(1,0);
         w.addBox(2, 4);
         w.addBox(3,5);
+        w.addBox(4, 4);
+        w.addBox(5,5);
 
         w.addRequest(0, 0, 1);
         w.addRequest(1, 0, 5);

@@ -60,11 +60,11 @@ public class Warehouse {
 
         sb.append("\n Racks: \n");
         for(Rack r : racks)
-            sb.append("\t  - " + r + "\n");
+            sb.append("\t" + r + "\n");
 
         sb.append("\n Vehicles: \n");
         for(Vehicle v : vehicles)
-            sb.append("\t - " + v + "\n");
+            sb.append("\t" + v + "\n");
 
         return sb.toString();
     }
