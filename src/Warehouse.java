@@ -36,8 +36,12 @@ public class Warehouse {
 
     public void addBox(int boxID, int rackID) throws RackException {
         Box b = new Box(boxID);
-        racks[rackID].addBoxes(b);
-        inventory.put(b, racks[rackID]);
+        if(rackID > 0) {
+            racks[rackID - 1].addBoxes(b);
+            inventory.put(b, racks[rackID - 1]);
+        }
+
+        else buffer.add(b);
     }
 
     public void addRequest(int boxId, int pickUpLocation, int dropOffLocation) {
