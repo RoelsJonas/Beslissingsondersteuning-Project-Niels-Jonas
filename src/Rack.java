@@ -41,7 +41,7 @@ public class Rack {
     }
 
     public void addBoxes(Box box) throws RackException {
-        if(stack.size()< MAX_CAPACITY) {
+        if(stack.size() < MAX_CAPACITY) {
             stack.add(box);
         }
 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a1a04ec1-940a-41b7-8c65-d18a544b5aba" name="Changes" comment="Added test main">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Warehouse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Warehouse.java" afterDir="false" />
+    <list default="true" id="a1a04ec1-940a-41b7-8c65-d18a544b5aba" name="Changes" comment="bugfix">
+      <change beforePath="$PROJECT_DIR$/src/Box.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Box.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Rack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Rack.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -148,7 +148,21 @@
       <option name="project" value="LOCAL" />
       <updated>1696239975121</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="bugfix">
+      <created>1696240145678</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1696240145678</updated>
+    </task>
+    <task id="LOCAL-00006" summary="bugfix">
+      <created>1696240201577</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1696240201577</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -170,6 +184,7 @@
     <MESSAGE value="worked out warehouse, box, TransportRequest and rack classes" />
     <MESSAGE value="Added toString for warehouse" />
     <MESSAGE value="Added test main" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added test main" />
+    <MESSAGE value="bugfix" />
+    <option name="LAST_COMMIT_MESSAGE" value="bugfix" />
   </component>
 </project>

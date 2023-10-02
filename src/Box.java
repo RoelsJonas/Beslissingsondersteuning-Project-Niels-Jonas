@@ -8,4 +8,12 @@ public class Box {
     public int getId() {
         return id;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Box{");
+        sb.append("id=").append(id);
+        sb.append('}');
+        return sb.toString();
+    }
 }
