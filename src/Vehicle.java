@@ -67,14 +67,14 @@ public class Vehicle {
     public String toString(){
         StringBuilder sb = new StringBuilder();
         sb.append("--id: "+ ID +"-------------------------------------");
-        sb.append("\n Stack:");
+        sb.append("\n\t Stack:");
         for (Box box : stack) {
-            sb.append(box.getId() + " | ");
+            sb.append(box.toString() + " | ");
         }
         
-        sb.append("\n Requests:");
+        sb.append("\n\t Requests:");
         for (TransportRequest request : requests) {
-            sb.append("\t" + request.toString());
+            sb.append("\t\t" + request.toString());
         }
 
         return sb.toString();
