@@ -27,7 +27,7 @@ public class Warehouse {
 
         racks = new Rack[AMOUNT_OF_RACKS];
         for(int i = 1; i <= AMOUNT_OF_RACKS; i++)
-            racks[i] = new Rack(i, 2 * i, 2, RACK_SIZE);
+            racks[i-1] = new Rack(i, 2 * i, 2, RACK_SIZE);
 
         vehicles = new Vehicle[AMOUNT_OF_VEHICLES];
         for(int i = 0; i < AMOUNT_OF_VEHICLES; i++)
