@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a1a04ec1-940a-41b7-8c65-d18a544b5aba" name="Changes" comment="bugfix">
+    <list default="true" id="a1a04ec1-940a-41b7-8c65-d18a544b5aba" name="Changes" comment="fix">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Box.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Box.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Rack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Rack.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Warehouse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Warehouse.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -119,6 +122,11 @@
       <option name="presentableId" value="Default" />
       <updated>1696233638284</updated>
       <workItem from="1696233639656" duration="4685000" />
+      <workItem from="1696513836616" duration="44000" />
+      <workItem from="1697095537160" duration="1198000" />
+      <workItem from="1697110350200" duration="172000" />
+      <workItem from="1697623204970" duration="840000" />
+      <workItem from="1698320449660" duration="71000" />
     </task>
     <task id="LOCAL-00001" summary="Added classes">
       <created>1696234746771</created>
@@ -162,7 +170,21 @@
       <option name="project" value="LOCAL" />
       <updated>1696240201577</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="bugfix">
+      <created>1696240394631</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1696240394631</updated>
+    </task>
+    <task id="LOCAL-00008" summary="fix">
+      <created>1696240570706</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1696240570706</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -185,6 +207,7 @@
     <MESSAGE value="Added toString for warehouse" />
     <MESSAGE value="Added test main" />
     <MESSAGE value="bugfix" />
-    <option name="LAST_COMMIT_MESSAGE" value="bugfix" />
+    <MESSAGE value="fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix" />
   </component>
 </project>

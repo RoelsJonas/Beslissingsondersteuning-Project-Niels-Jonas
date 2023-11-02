@@ -48,16 +48,38 @@ public class Rack {
         else throw new RackException("Rack " + ID + " is Full");
     }
 
+    public Stack<Box> removeBoxes(int pos) throws RackException {
+        if(pos > stack.size()) throw new RackException("Not enough elements in rack");
+        Stack<Box> res = new Stack<>();
+        Object[] temp = stack.toArray();
+        for(int i = temp.length - 1 - pos; i < temp.length; i++) {
+            res.add((Box) temp[i]);
+            stack.pop();
+        }
+
+//        for (Box box : res) {
+//            System.out.print(box + " | ");
+//        }
+//        System.out.println();
+
+        return res;
+    }
+
     public String toString(){
         StringBuilder sb = new StringBuilder();
         sb.append("--id: "+ ID +"-------------------------------------");
         sb.append("\n\t\t Stack:");
         for (Box box : stack) {
-            sb.append(box.toString() + " | ");
+            sb.append(box + " | ");
         }
-        
         return sb.toString();
     }
+
+    public int getBoxPosition(Box b) {
+        return stack.search(b) - 1;
+    }
+
+
 }
 
 class RackException extends Exception {

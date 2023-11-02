@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 
 public class Warehouse {
     // Constants:
@@ -26,8 +23,8 @@ public class Warehouse {
         inventory = new HashMap<>();
 
         racks = new Rack[AMOUNT_OF_RACKS];
-        for(int i = 1; i <= AMOUNT_OF_RACKS; i++)
-            racks[i-1] = new Rack(i, 2 * i, 2, RACK_SIZE);
+        for(int i = 0; i < AMOUNT_OF_RACKS; i++)
+            racks[i] = new Rack(i, 2 * (i+1), 2, RACK_SIZE);
 
         vehicles = new Vehicle[AMOUNT_OF_VEHICLES];
         for(int i = 0; i < AMOUNT_OF_VEHICLES; i++)
@@ -36,9 +33,9 @@ public class Warehouse {
 
     public void addBox(int boxID, int rackID) throws RackException {
         Box b = new Box(boxID);
-        if(rackID > 0) {
-            racks[rackID - 1].addBoxes(b);
-            inventory.put(b, racks[rackID - 1]);
+        if(rackID >= 0) {
+            racks[rackID].addBoxes(b);
+            inventory.put(b, racks[rackID]);
         }
 
         else buffer.add(b);
@@ -47,6 +44,34 @@ public class Warehouse {
     public void addRequest(int boxId, int pickUpLocation, int dropOffLocation) {
         requests.add(new TransportRequest(boxId, pickUpLocation, dropOffLocation));
     }
+
+    public void pickUpBox(int vehicleID,int rackID, int boxID) throws RackException {
+        // get the position in the stack of the box (0 being top)
+        int boxPos = racks[rackID].getBoxPosition(new Box(boxID));
+        Stack<Box> boxes = racks[rackID].removeBoxes(boxPos);
+        // check if we can fit this box and all the ones above it on the vehicle
+//        if(vehicles[vehicleID].getFreeSpace() > boxPos) {
+
+        //TODO
+//
+//        }
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     @Override
