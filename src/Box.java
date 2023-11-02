@@ -1,13 +1,13 @@
 import java.util.Objects;
 
 public class Box {
-    private int id;
+    private String id;
 
-    public Box(int id) {
+    public Box(String id) {
         this.id = id;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 

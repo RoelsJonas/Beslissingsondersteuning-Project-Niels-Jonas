@@ -24,14 +24,14 @@ public class Warehouse {
 
         racks = new Rack[AMOUNT_OF_RACKS];
         for(int i = 0; i < AMOUNT_OF_RACKS; i++)
-            racks[i] = new Rack(i, 2 * (i+1), 2, RACK_SIZE);
+            racks[i] = new Rack(i, String.valueOf(i),  2 * (i+1), 2, RACK_SIZE);
 
         vehicles = new Vehicle[AMOUNT_OF_VEHICLES];
         for(int i = 0; i < AMOUNT_OF_VEHICLES; i++)
-            vehicles[i] = new Vehicle(i, VEHICLE_SPEED, VEHICLE_SIZE, 0, i+1);
+            vehicles[i] = new Vehicle(i, String.valueOf(i), VEHICLE_SPEED, VEHICLE_SIZE, 0, i+1);
     }
 
-    public void addBox(int boxID, int rackID) throws RackException {
+    public void addBox(String boxID, int rackID) throws RackException {
         Box b = new Box(boxID);
         if(rackID >= 0) {
             racks[rackID].addBoxes(b);
@@ -45,7 +45,7 @@ public class Warehouse {
         requests.add(new TransportRequest(boxId, pickUpLocation, dropOffLocation));
     }
 
-    public void pickUpBox(int vehicleID,int rackID, int boxID) throws RackException {
+    public void pickUpBox(int vehicleID,int rackID, String boxID) throws RackException {
         // get the position in the stack of the box (0 being top)
         int boxPos = racks[rackID].getBoxPosition(new Box(boxID));
         Stack<Box> boxes = racks[rackID].removeBoxes(boxPos);
@@ -57,22 +57,6 @@ public class Warehouse {
 //        }
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     @Override
     public String toString() {

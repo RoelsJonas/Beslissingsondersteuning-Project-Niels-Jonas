@@ -5,13 +5,15 @@ public class Vehicle {
     private float SPEED = 5;
     private float CAPACITY = 5;
     private int ID;
+    private String name;
 
     private int x,y = 0;
     private Stack<Box> stack = new Stack<>();
     private ArrayList<TransportRequest> requests = new ArrayList<>();
 
-    public Vehicle(int ID, float SPEED, float CAPACITY, int x, int y){
+    public Vehicle(int ID, String name, float SPEED, float CAPACITY, int x, int y){
         this.ID = ID;
+        this.name = name;
         this.SPEED = SPEED;
         this.CAPACITY = CAPACITY;
         this.x = x;
@@ -24,6 +26,15 @@ public class Vehicle {
     public int getY(){
         return y;
     }
+
+    public int getID() {
+        return ID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
     public void setX(int x){
         this.x = x;
     }
@@ -61,7 +72,6 @@ public class Vehicle {
     public void removeTransportRequest(int i){
         requests.remove(i);    
     }
-    
 
     
     public String toString(){

@@ -3,15 +3,17 @@ import java.util.Stack;
 public class Rack {
     private int ID;
     private int MAX_CAPACITY;
+    private String name;
 
     private int x;
     private int y;
     private Stack<Box> stack;
 
-    public Rack(int ID, int x, int y, int MAX_CAPACITY) {
+    public Rack(int ID, String name, int x, int y, int MAX_CAPACITY) {
         this.ID = ID;
         this.x = x;
         this.y = y;
+        this.name = name;
         this.MAX_CAPACITY = MAX_CAPACITY;
         stack = new Stack<>();
     }
@@ -22,6 +24,10 @@ public class Rack {
 
     public int getY() {
         return y;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public int getCapacity() {
