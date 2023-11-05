@@ -2,9 +2,10 @@ import java.util.Stack;
 
 public class Rack {
     private int ID;
-    private int MAX_CAPACITY;
     private String name;
-
+    
+    private int MAX_CAPACITY;
+    
     private int x;
     private int y;
     private Stack<Box> stack;
@@ -37,13 +38,16 @@ public class Rack {
     public int getMAX_CAPACITY() {
         return MAX_CAPACITY;
     }
+    public Stack<Box> getStack() {
+        return stack;
+    }
 
     public void addBoxes(Stack<Box> boxes) throws Exception {
         if(stack.size() + boxes.size() <= MAX_CAPACITY) {
             stack.addAll(boxes);
         }
 
-        else throw new RackException("Rack " + ID + " is too full to fit boxes");
+        else throw new RackException("Rack " + name + " is too full to fit boxes");
     }
 
     public void addBoxes(Box box) throws RackException {
@@ -51,7 +55,7 @@ public class Rack {
             stack.add(box);
         }
 
-        else throw new RackException("Rack " + ID + " is Full");
+        else throw new RackException("Rack " + name + " is Full");
     }
 
     public Stack<Box> removeBoxes(int pos) throws RackException {
@@ -71,21 +75,19 @@ public class Rack {
         return res;
     }
 
-    public String toString(){
+    public int getBoxPosition(Box b) {
+        return stack.search(b) - 1;
+    }
+
+        public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append("--id: "+ ID +"-------------------------------------");
+        sb.append("--name: "+ name +"-------------------------------------");
         sb.append("\n\t\t Stack:");
         for (Box box : stack) {
             sb.append(box + " | ");
         }
         return sb.toString();
     }
-
-    public int getBoxPosition(Box b) {
-        return stack.search(b) - 1;
-    }
-
-
 }
 
 class RackException extends Exception {

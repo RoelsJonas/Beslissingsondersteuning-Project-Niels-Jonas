@@ -2,11 +2,12 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 public class Vehicle {
-    private float SPEED = 5;
-    private float CAPACITY = 5;
     private int ID;
     private String name;
-
+    
+    private float SPEED = 5;
+    private float CAPACITY = 5;
+    
     private int x,y = 0;
     private Stack<Box> stack = new Stack<>();
     private ArrayList<TransportRequest> requests = new ArrayList<>();
@@ -48,7 +49,7 @@ public class Vehicle {
 
     public void addBox(Box b) throws VehicleException{
         if(stack.size() == CAPACITY){
-            throw new VehicleException("Vehicle with id " + ID + " can't fit any more boxes but wants to add more");
+            throw new VehicleException("Vehicle with id " + name + " can't fit any more boxes but wants to add more");
         }
 
         stack.push(b);
@@ -56,7 +57,7 @@ public class Vehicle {
 
     public Box removeBox() throws VehicleException{
         if(stack.size() > 0){
-            throw new VehicleException("Vehicle with id " + ID + " wants to remove a box but has none");
+            throw new VehicleException("Vehicle with id " + name + " wants to remove a box but has none");
         }
 
         Box b = stack.pop();
@@ -76,7 +77,7 @@ public class Vehicle {
     
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append("--id: "+ ID +"-------------------------------------");
+        sb.append("--id: "+ name +"-------------------------------------");
         sb.append("\n\t\t Stack:");
         for (Box box : stack) {
             sb.append(box.toString() + " | ");

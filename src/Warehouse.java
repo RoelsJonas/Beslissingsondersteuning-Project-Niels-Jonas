@@ -2,33 +2,33 @@ import java.util.*;
 
 public class Warehouse {
     // Constants:
-    private static final int AMOUNT_OF_RACKS = 10;
-    private static final int AMOUNT_OF_VEHICLES = 2;
-    private static final int RACK_SIZE = 5;
-    private static final int VEHICLE_SIZE = 4;
-    private static final int BUFFER_X = 0;
-    private static final int BUFFER_Y = 0;
-    private static final int VEHICLE_SPEED = 5;
-    private static final int LOADING_TIME = 1;
+    private final int STACK_CAPACITY;
+    private final int VEHICLE_SPEED;
+    private final int LOADING_TIME;
 
-    private HashSet<Box> buffer;
+    private Buffer[] buffers;
     private Rack[] racks;
     private Vehicle[] vehicles;
     private HashSet<TransportRequest> requests;
     private HashMap<Box, Rack> inventory;
 
-    public Warehouse() {
-        buffer = new HashSet<>();
-        requests = new HashSet<>();
+    public Warehouse(Vehicle[] vehicles, Rack[] racks, HashSet<TransportRequest> requests, Buffer[] buffers, int stackcapacity, int vehiclespeed, int loadingduration) {
+        this.vehicles =vehicles;
+        this.racks = racks;
+        this.requests = requests;
+        this.buffers = buffers;
+
+        // Set constants
+        STACK_CAPACITY = stackcapacity;
+        VEHICLE_SPEED = vehiclespeed;
+        LOADING_TIME = loadingduration;
+
+        // Setup the buffers
+        setupBuffers();
+
+        // Setup inventory
         inventory = new HashMap<>();
-
-        racks = new Rack[AMOUNT_OF_RACKS];
-        for(int i = 0; i < AMOUNT_OF_RACKS; i++)
-            racks[i] = new Rack(i, String.valueOf(i),  2 * (i+1), 2, RACK_SIZE);
-
-        vehicles = new Vehicle[AMOUNT_OF_VEHICLES];
-        for(int i = 0; i < AMOUNT_OF_VEHICLES; i++)
-            vehicles[i] = new Vehicle(i, String.valueOf(i), VEHICLE_SPEED, VEHICLE_SIZE, 0, i+1);
+        setupInventory();
     }
 
     public void addBox(String boxID, int rackID) throws RackException {
@@ -38,11 +38,7 @@ public class Warehouse {
             inventory.put(b, racks[rackID]);
         }
 
-        else buffer.add(b);
-    }
-
-    public void addRequest(int boxId, int pickUpLocation, int dropOffLocation) {
-        requests.add(new TransportRequest(boxId, pickUpLocation, dropOffLocation));
+        else buffers[0].addBox(b);
     }
 
     public void pickUpBox(int vehicleID,int rackID, String boxID) throws RackException {
@@ -58,14 +54,33 @@ public class Warehouse {
 
     }
 
+    public void setupInventory(){
+        for(Rack rack : racks){
+            for(Box box : rack.getStack()){
+                inventory.put(box, rack);
+            }
+        }
+    }
+
+    // Because the boxes in the vuffers are not given we need to search for those
+    public void setupBuffers(){
+        for(Buffer buffer : buffers){
+            for(TransportRequest request : requests){
+                if(buffer.getName().equals(request.getPickupLocation())){
+                    Box b = new Box(request.getBoxID());
+                    buffer.addBox(b);
+                }
+            }
+        }
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        Object[] boxes = buffer.toArray();
-        sb.append("Buffer: \n");
-        for(Object b : boxes)
-            sb.append("\t - " + b + "\n");
+        sb.append("\n Buffers: \n");
+        for(Buffer b : buffers)
+            sb.append("\t" + b + "\n");
 
         sb.append("\n Racks: \n");
         for(Rack r : racks)

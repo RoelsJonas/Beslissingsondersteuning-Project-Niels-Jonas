@@ -1,20 +1,20 @@
 import java.util.Objects;
 
 public class Box {
-    private String id;
+    private String ID;
 
-    public Box(String id) {
-        this.id = id;
+    public Box(String ID) {
+        this.ID = ID;
     }
 
-    public String getId() {
-        return id;
+    public String getID() {
+        return ID;
     }
 
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Box{");
-        sb.append("id=").append(id);
+        sb.append("id=").append(ID);
         sb.append('}');
         return sb.toString();
     }
@@ -24,11 +24,11 @@ public class Box {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Box box = (Box) o;
-        return id == box.id;
+        return ID == box.ID;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(ID);
     }
 }

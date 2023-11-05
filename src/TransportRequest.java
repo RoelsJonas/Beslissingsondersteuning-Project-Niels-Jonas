@@ -1,28 +1,30 @@
 public class TransportRequest {
-    private int boxId;
-    private int pickupLocation;
-    private int dropOffLocation;
+    private int ID;
+    private String boxID;
+    private String pickupLocation;
+    private String dropOffLocation;
 
-    public TransportRequest(int boxId, int pickupLocation, int dropOffLocation) {
-        this.boxId = boxId;
+    public TransportRequest(int ID, String boxId, String pickupLocation, String dropOffLocation) {
+        this.ID = ID;
+        this.boxID = boxId;
         this.pickupLocation = pickupLocation;
         this.dropOffLocation = dropOffLocation;
     }
 
-    public int getBoxId() {
-        return boxId;
+    public String getBoxID() {
+        return boxID;
     }
 
-    public int getPickupLocation() {
+    public String getPickupLocation() {
         return pickupLocation;
     }
 
-    public int getDropOffLocation() {
+    public String getDropOffLocation() {
         return dropOffLocation;
     }
 
     
     public String toString(){
-        return boxId + " from " + pickupLocation + " -> " + dropOffLocation;
+        return boxID + " from " + pickupLocation + " -> " + dropOffLocation;
     }
 }
