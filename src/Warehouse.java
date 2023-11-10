@@ -41,16 +41,20 @@ public class Warehouse {
         else buffers[0].addBox(b);
     }
 
-    public void pickUpBox(int vehicleID,int rackID, String boxID) throws RackException {
-        // get the position in the stack of the box (0 being top)
-        int boxPos = racks[rackID].getBoxPosition(new Box(boxID));
-        Stack<Box> boxes = racks[rackID].removeBoxes(boxPos);
-        // check if we can fit this box and all the ones above it on the vehicle
-//        if(vehicles[vehicleID].getFreeSpace() > boxPos) {
+    public void pickUpBox(int vehicleID,int rackID, String boxID) throws Exception {
+        // Get the position in the stack of the box (0 being top), and remove them from the rack
+        Rack rack = racks[rackID];
+        int boxPos = rack.getBoxPosition(new Box(boxID));
+        Stack<Box> boxes = rack.removeBoxes(boxPos);
 
-        //TODO
-//
-//        }
+        // Check if we can fit this box and all the ones above it on the vehicle
+        Vehicle vehicle = vehicles[vehicleID];
+        if(vehicle.getFreeSpace() > boxPos) {
+            vehicle.addBoxes(boxes);
+        }
+        else{
+            rack.addBoxes(boxes);
+        }
 
     }
 

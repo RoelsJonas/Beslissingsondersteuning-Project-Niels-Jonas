@@ -5,17 +5,21 @@ public class Vehicle {
     private int ID;
     private String name;
     
-    private float SPEED = 5;
-    private float CAPACITY = 5;
+    private float SPEED;
+    private float LOADING_TIME;
+    private int CAPACITY;
     
-    private int x,y = 0;
+    private int x,y;
+    
+    private float time = 0;
     private Stack<Box> stack = new Stack<>();
     private ArrayList<TransportRequest> requests = new ArrayList<>();
 
-    public Vehicle(int ID, String name, float SPEED, float CAPACITY, int x, int y){
+    public Vehicle(int ID, String name, float SPEED, float LOADING_TIME, int CAPACITY, int x, int y){
         this.ID = ID;
         this.name = name;
         this.SPEED = SPEED;
+        this.LOADING_TIME = LOADING_TIME;
         this.CAPACITY = CAPACITY;
         this.x = x;
         this.y = y;
@@ -49,15 +53,24 @@ public class Vehicle {
 
     public void addBox(Box b) throws VehicleException{
         if(stack.size() == CAPACITY){
-            throw new VehicleException("Vehicle with id " + name + " can't fit any more boxes but wants to add more");
+            throw new VehicleException("Vehicle with name " + name + " can't fit any more boxes but wants to add more");
         }
 
+        time += LOADING_TIME;
         stack.push(b);
+    }
+
+    public void addBoxes(Stack<Box> boxes) throws Exception {
+        if(stack.size() + boxes.size() <= CAPACITY) {
+            time += LOADING_TIME;
+            stack.addAll(boxes);
+        }
+        else throw new RackException("Vehicle with name " + name + " is too full to fit boxes");
     }
 
     public Box removeBox() throws VehicleException{
         if(stack.size() > 0){
-            throw new VehicleException("Vehicle with id " + name + " wants to remove a box but has none");
+            throw new VehicleException("Vehicle with name " + name + " wants to remove a box but has none");
         }
 
         Box b = stack.pop();
@@ -72,6 +85,10 @@ public class Vehicle {
 
     public void removeTransportRequest(int i){
         requests.remove(i);    
+    }
+
+    public int getFreeSpace() {
+        return (CAPACITY - stack.size());
     }
 
     

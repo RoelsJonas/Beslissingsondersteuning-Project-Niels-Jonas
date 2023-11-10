@@ -80,7 +80,7 @@ public class Main {
             int x = obj.get("xCoordinate").getAsInt();
             int y = obj.get("yCoordinate").getAsInt();
 
-            Vehicle vehicle = new Vehicle(id, name, vehiclespeed, capacity, x, y);
+            Vehicle vehicle = new Vehicle(id, name, vehiclespeed, loadingduration, capacity, x, y);
             vehicles[vehicleIndex++] = vehicle;
         }
 
