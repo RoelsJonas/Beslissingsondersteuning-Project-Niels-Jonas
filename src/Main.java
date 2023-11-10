@@ -1,9 +1,11 @@
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Stack;
+import java.util.stream.Stream;
 
 import com.google.gson.*;
 
@@ -84,6 +86,9 @@ public class Main {
             vehicles[vehicleIndex++] = vehicle;
         }
 
+        // Get all storages in one array
+        Storage[] storages = Stream.concat(Arrays.stream(buffers), Arrays.stream(racks)).toArray(Storage[]::new);
+
         // Read transportrequests data
         JsonArray transportRequestsObj = inputfile.getAsJsonArray("requests");
         HashSet<TransportRequest> transportRequests = new HashSet<>(); 
@@ -93,24 +98,25 @@ public class Main {
             int id = obj.get("ID").getAsInt();
             String boxID = obj.get("boxID").getAsString();
             String pickupLocation = obj.getAsJsonArray("pickupLocation").get(0).getAsString();
-            String placeLocation =  obj.getAsJsonArray("placeLocation").get(0).getAsString();
+            String dropLocation =  obj.getAsJsonArray("placeLocation").get(0).getAsString();
 
-            TransportRequest transportRequest = new TransportRequest(id, boxID, pickupLocation, placeLocation);
+            Storage pickupStorage = null;
+            Storage dropStorage = null;
+            for(Storage s : storages){
+                if(s.getName().equals(pickupLocation)) pickupStorage = s;
+                if(s.getName().equals(dropLocation)) dropStorage = s;
+            }
+
+            if(pickupStorage == null || dropStorage == null) System.err.println("Pickup or drop storage not found!");
+
+            TransportRequest transportRequest = new TransportRequest(id, boxID, pickupStorage, dropStorage);
             transportRequests.add(transportRequest);
         }
 
-        Warehouse w = new Warehouse(vehicles, racks, transportRequests, buffers, stackcapacity, vehiclespeed, loadingduration);
-
-        // w.addBox("0", -1);
-        // w.addBox("1",0);
-        // w.addBox("2", 4);
-        // w.addBox("3",5);
-        // w.addBox("4", 4);
-        // w.addBox("5",5);
+        Warehouse w = new Warehouse(vehicles, racks, transportRequests, buffers, stackcapacity, vehiclespeed, loadingduration, storages);
 
         System.out.println(w);
 
-        // w.pickUpBox(0, 4, 4);
-        // w.pickUpBox(0, 4, "2");
+        w.processAllRequests();
     }
 }

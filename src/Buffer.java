@@ -1,48 +1,40 @@
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Stack;
 
-public class Buffer {
-    private int ID;
-    private String name;
-
-    private int x;
-    private int y;
+public class Buffer extends Storage{
 
     HashSet<Box> boxes;
 
     public Buffer(int ID, String name, int x, int y) {
-        this.ID = ID;
-        this.name = name;        
-        this.x = x;        
-        this.y = y;
-        this.boxes = new HashSet<>();
+        super(ID, name, x, y, Integer.MAX_VALUE);
+        boxes = new HashSet<>();
     }
-
-    public int getX() {
-        return x;
-    }
-    public int getY() {
-        return x;
-    }
-    public String getName() {
-        return name;
-    }
-    public HashSet<Box> getBoxes(){
-        return boxes;
-    }
-
     
-    public void addBox(Box b){
-        boxes.add(b);
+    public void addBox(Box box){
+        boxes.add(box);
     }
     public void addBoxes(Stack<Box> boxes){
        this.boxes.addAll(boxes);
     }
 
-    public void pickUpBox(String boxID){
-        boxes.removeIf(box -> box.getID().equals(boxID));
-    }
+    public Box removeBox(String boxID){
+        Iterator<Box> iterator = boxes.iterator();
 
+        while (iterator.hasNext()) {
+            Box box = iterator.next();
+            if (box.getID().equals(boxID)) {
+                iterator.remove(); 
+                return box; 
+            }
+        }
+    
+        return null;
+    }
+ 
+    public int getCapacity() {
+        return boxes.size();
+    }
 
     public String toString(){
         StringBuilder sb = new StringBuilder();

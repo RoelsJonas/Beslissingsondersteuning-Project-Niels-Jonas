@@ -11,7 +11,7 @@ public class Vehicle {
     
     private int x,y;
     
-    private float time = 0;
+    private int time = 0;
     private Stack<Box> stack = new Stack<>();
     private ArrayList<TransportRequest> requests = new ArrayList<>();
 
@@ -47,6 +47,10 @@ public class Vehicle {
         this.y = y;
     }
 
+    public int getTime(){
+        return time;
+    }
+
     public int getCapacity(){
         return stack.size();
     }
@@ -69,12 +73,11 @@ public class Vehicle {
     }
 
     public Box removeBox() throws VehicleException{
-        if(stack.size() > 0){
+        if(stack.size() <= 0){
             throw new VehicleException("Vehicle with name " + name + " wants to remove a box but has none");
         }
-
+        time += LOADING_TIME;
         Box b = stack.pop();
-
         return b;
     }
 
@@ -89,6 +92,14 @@ public class Vehicle {
 
     public int getFreeSpace() {
         return (CAPACITY - stack.size());
+    }
+
+
+    public void drive(Storage storage){
+        float distance = Math.abs(storage.x - x) + Math.abs(storage.y - y);
+        time += distance / SPEED;
+        x = storage.x;
+        y = storage.y;
     }
 
     

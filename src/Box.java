@@ -20,11 +20,15 @@ public class Box {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Box box = (Box) o;
-        return ID == box.ID;
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Box otherBox = (Box) obj;
+        return ID.equals(otherBox.getID());
     }
 
     @Override
