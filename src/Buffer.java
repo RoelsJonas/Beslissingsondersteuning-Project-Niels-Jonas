@@ -32,9 +32,10 @@ public class Buffer extends Storage{
         return null;
     }
  
-    public int getCapacity() {
-        return boxes.size();
+    public int getFreeSpace() {
+        return (MAX_CAPACITY - boxes.size());
     }
+
 
     public String toString(){
         StringBuilder sb = new StringBuilder();

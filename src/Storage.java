@@ -30,9 +30,6 @@ public class Storage {
     public String getName() {
         return name;
     }
-    public int getMAX_CAPACITY() {
-        return MAX_CAPACITY;
-    }
 
     
     public void addBox(Box b) throws Exception{}
@@ -40,8 +37,13 @@ public class Storage {
     public Box removeBox(String boxID)throws Exception{return null;}
     public Stack<Box> removeBoxes(int pos)throws Exception{return null;}
     
-    public int getCapacity() {return 0;}
+    public int getFreeSpace() {return 0;}
     public int getBoxPosition(Box b) {return 0;}
+
+    public boolean equals(Storage s){
+        return name.equals(s.name);
+    }
+
 }
 
 class RackException extends Exception {

@@ -40,8 +40,8 @@ public class Rack extends Storage{
     public Stack<Box> getStack() {
         return stack;
     }
-    public int getCapacity() {
-        return stack.size();
+    public int getFreeSpace() {
+        return (MAX_CAPACITY - stack.size());
     }
 
     public int getBoxPosition(Box b){

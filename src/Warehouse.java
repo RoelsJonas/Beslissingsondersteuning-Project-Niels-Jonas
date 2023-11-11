@@ -51,27 +51,24 @@ public class Warehouse {
             vehicle.addTransportRequest(request);
 
             // Load the box
-            logs.append(vehicle.getName()+";"+vehicle.getX()+";"+vehicle.getY()+";"+vehicle.getTime()+";");
             vehicle.drive(pickup);
             pickUpBox(vehicle.getID(), pickup, boxID);
-            logs.append(vehicle.getX()+";"+vehicle.getY()+";"+vehicle.getTime()+";"+boxID+";"+"PL\n");
 
             // Unload the box
-            logs.append(vehicle.getName()+";"+vehicle.getX()+";"+vehicle.getY()+";"+vehicle.getTime()+";");
             vehicle.drive(drop);
             dropOffBox(vehicle.getID(), drop, boxID);
-            logs.append(vehicle.getX()+";"+vehicle.getY()+";"+vehicle.getTime()+";"+boxID+";"+"PU\n");
 
-            // Write logs
-            String logContent = logs.toString();
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/Solutions/logs.txt"))) {
-                writer.write(logContent);
-                System.out.println("Logs written to file successfully.");
-            } catch (IOException e) {
-                System.err.println("Error writing logs to file: " + e.getMessage());
-            }
+            vehicle.removeTransportRequest(0);
         }
+        logs.append(vehicle.getLogs());
         
+        // Write logs
+        String logContent = logs.toString();
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/Solutions/logs.txt"))) {
+            writer.write(logContent);
+        } catch (IOException e) {
+            System.err.println("Error writing logs to file: " + e.getMessage());
+        }
     }
 
     // Pickup a box from a Buffer or Rack and load it onto a vehicle
@@ -83,6 +80,7 @@ public class Warehouse {
             if(vehicle.getFreeSpace() > 0) {
                 Box box = storage.removeBox(boxID);
                 vehicle.addBox(box);
+                removeBoxesInventory(box);
             }
         }
         // Add box(es) from a Rack to a vehicle
@@ -91,6 +89,7 @@ public class Warehouse {
             if(vehicle.getFreeSpace() > boxPos) {
                 Stack<Box> boxes = storage.removeBoxes(boxPos);
                 vehicle.addBoxes(boxes);
+                removeBoxesInventory(boxes);
             }
         }
     }
@@ -98,9 +97,21 @@ public class Warehouse {
     // Dropoff a box to a Buffer or Rack and load it onto a vehicle
     public void dropOffBox(int vehicleID, Storage storage, String boxID) throws Exception {
         Vehicle vehicle = vehicles[vehicleID];
-        Box box = vehicle.removeBox();
-        if(storage.getMAX_CAPACITY() - storage.getCapacity() > 1){
-            storage.addBox(box);
+        int boxPos = vehicle.getBoxPosition(new Box(boxID));
+        if(storage.getFreeSpace() > boxPos){
+
+            // Add the box(es) from a vehicle to a Buffer (this happens box by box)
+            if (storage instanceof Buffer){
+                Stack<Box> boxes = vehicle.removeBoxesOneByOne(boxPos);
+                storage.addBoxes(boxes);
+                addBoxesInventory(boxes, storage);
+            }
+            // Add the box(es) from a vehicle to a Rack (this happens stacked)
+            else{
+                Stack<Box> boxes = vehicle.removeBoxesStacked(boxPos);
+                storage.addBoxes(boxes);
+                addBoxesInventory(boxes, storage);
+            }
         }
     }
 
@@ -140,6 +151,36 @@ public class Warehouse {
                     inventory.put(b, buffer);
                 }
             }
+        }
+    }
+
+    public void validateWarehouse(){
+        int wrongs = 0;
+        for(TransportRequest request : requests){
+            String boxID = request.getBoxID();
+            Storage dropOffStorage = request.getDropOffLocation();
+
+            Storage currentStorage = inventory.get(new Box(boxID));
+            if(currentStorage == null){
+                System.out.println("FAIL: Box with id " + boxID + " wasn't found in the inventory, probably still in a vehicle or lost");
+                wrongs++;
+                continue;
+            }
+
+            if(!currentStorage.equals(dropOffStorage)){
+                System.out.println("FAIL: Box with id " + boxID + " wasn't located on storage with name " + dropOffStorage.getName() + " but on " + currentStorage.getName());
+                wrongs++;
+            }
+            else{
+                System.out.println("SUCCESS: Box with id " + boxID + " was located in the right storage");
+            }
+        }
+
+        if(wrongs == 0){
+            System.out.println("No errors found during processing, all boxes located in the right storages");
+        }
+        else{
+            System.out.println("Found " + wrongs + "/"+ requests.size() + " boxes that are not located in the right storage");
         }
     }
 

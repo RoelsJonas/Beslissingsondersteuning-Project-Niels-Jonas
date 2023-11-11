@@ -118,5 +118,6 @@ public class Main {
         System.out.println(w);
 
         w.processAllRequests();
+        w.validateWarehouse();
     }
 }
