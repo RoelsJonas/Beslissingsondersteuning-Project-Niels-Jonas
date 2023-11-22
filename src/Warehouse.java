@@ -41,6 +41,11 @@ public class Warehouse {
     public void processAllRequests() throws Exception{
         Vehicle vehicle = vehicles[0];
         requests.sort((o1, o2) -> {
+            int res = 0;
+            if(o1.getDropOffLocation().getClass() != o2.getDropOffLocation().getClass()) {
+                if(o1.getDropOffLocation().getClass() == Buffer.class) return Integer.MIN_VALUE;
+                else return Integer.MAX_VALUE;
+            }
             String id1 = o1.getBoxID();
             String id2 = o2.getBoxID();
             Box b1 = new Box(id1);
@@ -89,11 +94,11 @@ public class Warehouse {
     // Pickup a box from a Buffer or Rack and load it onto a vehicle
     public void pickUpBox(int vehicleID, Storage storage, String boxID) throws Exception {
         Vehicle vehicle = vehicles[vehicleID];
-
+        Box box = new Box(boxID);
         // Add the box from a Buffer to a vehicle
         if (storage instanceof Buffer){
             if(vehicle.getFreeSpace() > 0) {
-                Box box = storage.removeBox(boxID);
+                box = storage.removeBox(boxID);
                 vehicle.addBox(box);
                 removeBoxesInventory(box);
             }
@@ -101,7 +106,7 @@ public class Warehouse {
         }
         // Add box(es) from a Rack to a vehicle
         else{
-            int boxPos = storage.getBoxPosition(new Box(boxID));
+            int boxPos = storage.getBoxPosition(box);
             if(vehicle.getFreeSpace() > boxPos) {
                 Stack<Box> boxes = storage.removeBoxes(boxPos);
                 vehicle.addBoxes(boxes);
@@ -115,6 +120,21 @@ public class Warehouse {
             }
             else {
                 System.out.println("aah"); // TODO WAT ALS STORAGE VAN VEHICLE VOL
+//                int amountToRelocate = boxPos - vehicle.getFreeSpace();
+//                String[] boxIds = new String[amountToRelocate];
+//                String[] rackIds = new String[amountToRelocate];
+//                // We need to relocate boxes
+//                int initialSpace = vehicle.getFreeSpace();
+//                while(vehicle.getFreeSpace() <= storage.getBoxPosition(box)) {
+//                    Stack<Box> boxes = storage.removeBoxes(vehicle.getFreeSpace());
+//                    vehicle.addBoxes(boxes);
+//                    int i = 0;
+//                    while(vehicle.getFreeSpace() != initialSpace) {
+//                        if(racks[i].getFreeSpace() > 0) {
+//
+//                        }
+//                    }
+//                }
             }
         }
     }

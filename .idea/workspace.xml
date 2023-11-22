@@ -4,15 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a1a04ec1-940a-41b7-8c65-d18a544b5aba" name="Changes" comment="fixed non LIFO vehicles">
-      <change afterPath="$PROJECT_DIR$/src/Data/I100_120_2_2_8b2.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Data/I100_50_2_2_8b2.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Data/I20_20_2_2_8b2.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Data/I30_100_1_1_10.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Data/I30_100_3_3_10.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Data/I30_200_3_3_10.json" afterDir="false" />
+    <list default="true" id="a1a04ec1-940a-41b7-8c65-d18a544b5aba" name="Changes" comment="Fixed JSON reader">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Warehouse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Warehouse.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -157,7 +150,7 @@
       <workItem from="1697623204970" duration="840000" />
       <workItem from="1698320449660" duration="71000" />
       <workItem from="1700637325166" duration="585000" />
-      <workItem from="1700642888294" duration="3976000" />
+      <workItem from="1700642888294" duration="6767000" />
     </task>
     <task id="LOCAL-00001" summary="Added classes">
       <created>1696234746771</created>
@@ -223,7 +216,15 @@
       <option name="project" value="LOCAL" />
       <updated>1700645980433</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Fixed JSON reader">
+      <option name="closed" value="true" />
+      <created>1700647225486</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1700647225486</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -248,6 +249,7 @@
     <MESSAGE value="bugfix" />
     <MESSAGE value="fix" />
     <MESSAGE value="fixed non LIFO vehicles" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed non LIFO vehicles" />
+    <MESSAGE value="Fixed JSON reader" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed JSON reader" />
   </component>
 </project>
