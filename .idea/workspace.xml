@@ -4,13 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a1a04ec1-940a-41b7-8c65-d18a544b5aba" name="Changes" comment="fix">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="a1a04ec1-940a-41b7-8c65-d18a544b5aba" name="Changes" comment="fixed non LIFO vehicles">
+      <change afterPath="$PROJECT_DIR$/src/Data/I100_120_2_2_8b2.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Data/I100_50_2_2_8b2.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Data/I20_20_2_2_8b2.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Data/I30_100_1_1_10.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Data/I30_100_3_3_10.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Data/I30_200_3_3_10.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Beslssingsondersteuning-Project-Niels-Jonas.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Beslssingsondersteuning-Project-Niels-Jonas.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Solutions/logs.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/Solutions/logs.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Vehicle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Vehicle.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Warehouse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Warehouse.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -106,6 +108,7 @@
     "Repository.Attach.Annotations": "false",
     "Repository.Attach.JavaDocs": "false",
     "Repository.Attach.Sources": "false",
+    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
     "WebServerToolWindowFactoryState": "false",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -117,6 +120,11 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\jonas\OneDrive - KU Leuven\Notities\MS1\Algoritmen voor beslissingsondersteuning\Lab\Beslssingsondersteuning-Project-Niels-Jonas\src\Data" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="Main" />
@@ -149,7 +157,7 @@
       <workItem from="1697623204970" duration="840000" />
       <workItem from="1698320449660" duration="71000" />
       <workItem from="1700637325166" duration="585000" />
-      <workItem from="1700642888294" duration="3028000" />
+      <workItem from="1700642888294" duration="3976000" />
     </task>
     <task id="LOCAL-00001" summary="Added classes">
       <created>1696234746771</created>
@@ -207,7 +215,15 @@
       <option name="project" value="LOCAL" />
       <updated>1696240570706</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="fixed non LIFO vehicles">
+      <option name="closed" value="true" />
+      <created>1700645980433</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1700645980433</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -231,6 +247,7 @@
     <MESSAGE value="Added test main" />
     <MESSAGE value="bugfix" />
     <MESSAGE value="fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix" />
+    <MESSAGE value="fixed non LIFO vehicles" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed non LIFO vehicles" />
   </component>
 </project>

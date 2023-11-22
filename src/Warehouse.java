@@ -19,7 +19,7 @@ public class Warehouse {
     private StringBuilder logs;
 
     public Warehouse(Vehicle[] vehicles, Rack[] racks, ArrayList<TransportRequest> requests, Buffer[] buffers, int stackcapacity, int vehiclespeed, int loadingduration, Storage[] storages) {
-        this.vehicles =vehicles;
+        this.vehicles = vehicles;
         this.racks = racks;
         this.requests = requests;
         this.buffers = buffers;

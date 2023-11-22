@@ -16,7 +16,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
 
         // Read data from file
-        String jsonFile = "src/Data/I15_16_1_3.json";
+        String jsonFile = "src/Data/I30_200_3_3_10.json";
         JsonObject inputfile;
         try {
             inputfile = JsonParser.parseReader(new FileReader(jsonFile)).getAsJsonObject();
@@ -31,9 +31,10 @@ public class Main {
 
         // Read racks/stacks data
         JsonArray racksObj = inputfile.getAsJsonArray("stacks");
-        Rack[] racks = new Rack[racksObj.size()];
+        ArrayList<Rack> racks = new ArrayList<>();
         int rackIndex = 0;
         for(JsonElement jr: racksObj) {
+            if(jr instanceof JsonNull) break;
             JsonObject obj = jr.getAsJsonObject();
 
             int id = obj.get("ID").getAsInt();
@@ -44,6 +45,7 @@ public class Main {
             JsonArray boxesArray = obj.getAsJsonArray("boxes");
             Stack<Box> boxes = new Stack<>();
             for (JsonElement boxElement : boxesArray) {
+                if(boxElement instanceof JsonNull) break;
                 String boxId = boxElement.getAsString();
                 Box newBox = new Box(boxId);
                 boxes.add(newBox);
@@ -51,14 +53,15 @@ public class Main {
 
             Rack rack = new Rack(id, name, x, y, stackcapacity);
             rack.addBoxes(boxes);
-            racks[rackIndex++] = rack;
+            racks.add(rack);
         }
 
         // Read bufferpoints data
         JsonArray buffersObj = inputfile.getAsJsonArray("bufferpoints");
-        Buffer[] buffers = new Buffer[buffersObj.size()];
+        ArrayList<Buffer> buffers = new ArrayList<>();
         int bufferIndex = 0;
         for(JsonElement jr: buffersObj) {
+            if(jr instanceof JsonNull) break;
             JsonObject obj = jr.getAsJsonObject();
 
             int id = obj.get("ID").getAsInt();
@@ -67,40 +70,42 @@ public class Main {
             int y = obj.get("y").getAsInt();
 
             Buffer buffer = new Buffer(id, name, x, y);
-            buffers[bufferIndex++] = buffer;
+            buffers.add(buffer);
         }
 
         // Read vehicles data
         JsonArray vehiclesObj = inputfile.getAsJsonArray("vehicles");
-        Vehicle[] vehicles = new Vehicle[vehiclesObj.size()];
+        ArrayList<Vehicle> vehicles = new ArrayList<>();
         int vehicleIndex = 0;
         for(JsonElement jr: vehiclesObj) {
+            if(jr instanceof JsonNull) break;
             JsonObject obj = jr.getAsJsonObject();
 
 
             int id = obj.get("ID").getAsInt();
             String name = obj.get("name").getAsString();
             int capacity = obj.get("capacity").getAsInt();
-            int x = obj.get("xCoordinate").getAsInt();
-            int y = obj.get("yCoordinate").getAsInt();
+            int x = obj.get("x").getAsInt();
+            int y = obj.get("y").getAsInt();
 
             Vehicle vehicle = new Vehicle(id, name, vehiclespeed, loadingduration, capacity, x, y);
-            vehicles[vehicleIndex++] = vehicle;
+            vehicles.add(vehicle);
         }
 
         // Get all storages in one array
-        Storage[] storages = Stream.concat(Arrays.stream(buffers), Arrays.stream(racks)).toArray(Storage[]::new);
+        Storage[] storages = Stream.concat(Arrays.stream(buffers.toArray()), Arrays.stream(racks.toArray())).toArray(Storage[]::new);
 
         // Read transportrequests data
         JsonArray transportRequestsObj = inputfile.getAsJsonArray("requests");
         ArrayList<TransportRequest> transportRequests = new ArrayList<>();
         for(JsonElement jr: transportRequestsObj) {
+            if(jr instanceof JsonNull) break;
             JsonObject obj = jr.getAsJsonObject();
 
             int id = obj.get("ID").getAsInt();
             String boxID = obj.get("boxID").getAsString();
-            String pickupLocation = obj.getAsJsonArray("pickupLocation").get(0).getAsString();
-            String dropLocation =  obj.getAsJsonArray("placeLocation").get(0).getAsString();
+            String pickupLocation = obj.get("pickupLocation").getAsString();
+            String dropLocation =  obj.get("placeLocation").getAsString();
 
             Storage pickupStorage = null;
             Storage dropStorage = null;
@@ -115,7 +120,7 @@ public class Main {
             transportRequests.add(transportRequest);
         }
 
-        Warehouse w = new Warehouse(vehicles, racks, transportRequests, buffers, stackcapacity, vehiclespeed, loadingduration, storages);
+        Warehouse w = new Warehouse(vehicles.toArray(Vehicle[]::new), racks.toArray(Rack[]::new), transportRequests, buffers.toArray(Buffer[]::new), stackcapacity, vehiclespeed, loadingduration, storages);
 
         System.out.println(w);
 
