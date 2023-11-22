@@ -13,12 +13,12 @@ public class Warehouse {
     private Buffer[] buffers;
     private Rack[] racks;
     private Vehicle[] vehicles;
-    private HashSet<TransportRequest> requests;
+    private ArrayList<TransportRequest> requests;
     private HashMap<Box, Storage> inventory;
 
     private StringBuilder logs;
 
-    public Warehouse(Vehicle[] vehicles, Rack[] racks, HashSet<TransportRequest> requests, Buffer[] buffers, int stackcapacity, int vehiclespeed, int loadingduration, Storage[] storages) {
+    public Warehouse(Vehicle[] vehicles, Rack[] racks, ArrayList<TransportRequest> requests, Buffer[] buffers, int stackcapacity, int vehiclespeed, int loadingduration, Storage[] storages) {
         this.vehicles =vehicles;
         this.racks = racks;
         this.requests = requests;
@@ -40,6 +40,18 @@ public class Warehouse {
 
     public void processAllRequests() throws Exception{
         Vehicle vehicle = vehicles[0];
+        requests.sort((o1, o2) -> {
+            String id1 = o1.getBoxID();
+            String id2 = o2.getBoxID();
+            Box b1 = new Box(id1);
+            Box b2 = new Box(id2);
+            Storage s1 = inventory.get(b1);
+            Storage s2 = inventory.get(b2);
+            return s1.getBoxPosition(b1) - s2.getBoxPosition(b2);
+        });
+
+        System.out.println(this);
+
         Iterator<TransportRequest> iterator = requests.iterator();
 
         while (iterator.hasNext()) {
@@ -60,11 +72,14 @@ public class Warehouse {
 
             vehicle.removeTransportRequest(0);
         }
+
+        System.out.println(this);
+
         logs.append(vehicle.getLogs());
         
         // Write logs
         String logContent = logs.toString();
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/Solutions/logs.txt"))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/Solutions/logs2.txt"))) {
             writer.write(logContent);
         } catch (IOException e) {
             System.err.println("Error writing logs to file: " + e.getMessage());
@@ -82,6 +97,7 @@ public class Warehouse {
                 vehicle.addBox(box);
                 removeBoxesInventory(box);
             }
+            else System.out.printf("nee"); // TODO WAT ALS STORAGE VAN VEHICLE VOL
         }
         // Add box(es) from a Rack to a vehicle
         else{
@@ -90,6 +106,15 @@ public class Warehouse {
                 Stack<Box> boxes = storage.removeBoxes(boxPos);
                 vehicle.addBoxes(boxes);
                 removeBoxesInventory(boxes);
+                for(Box b : boxes) {
+                    if(!b.getID().equals(boxID)) {
+                        storage.addBox(b);
+                        addBoxesInventory(b, storage);
+                    }
+                }
+            }
+            else {
+                System.out.println("aah"); // TODO WAT ALS STORAGE VAN VEHICLE VOL
             }
         }
     }
@@ -97,22 +122,12 @@ public class Warehouse {
     // Dropoff a box to a Buffer or Rack and load it onto a vehicle
     public void dropOffBox(int vehicleID, Storage storage, String boxID) throws Exception {
         Vehicle vehicle = vehicles[vehicleID];
-        int boxPos = vehicle.getBoxPosition(new Box(boxID));
-        if(storage.getFreeSpace() > boxPos){
-
-            // Add the box(es) from a vehicle to a Buffer (this happens box by box)
-            if (storage instanceof Buffer){
-                Stack<Box> boxes = vehicle.removeBoxesOneByOne(boxPos);
-                storage.addBoxes(boxes);
-                addBoxesInventory(boxes, storage);
-            }
-            // Add the box(es) from a vehicle to a Rack (this happens stacked)
-            else{
-                Stack<Box> boxes = vehicle.removeBoxesStacked(boxPos);
-                storage.addBoxes(boxes);
-                addBoxesInventory(boxes, storage);
-            }
+        if(storage.getFreeSpace() > 0){
+            Box box = vehicle.removeBox(boxID);
+            storage.addBox(box);
+            addBoxesInventory(box, storage);
         }
+        else System.out.println("else"); // TODO WAT ALS STORAGE VOL IS
     }
 
 

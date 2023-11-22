@@ -9,6 +9,8 @@ import java.util.stream.Stream;
 
 import com.google.gson.*;
 
+import javax.lang.model.type.ArrayType;
+
 public class Main {
 
     public static void main(String[] args) throws Exception {
@@ -91,7 +93,7 @@ public class Main {
 
         // Read transportrequests data
         JsonArray transportRequestsObj = inputfile.getAsJsonArray("requests");
-        HashSet<TransportRequest> transportRequests = new HashSet<>(); 
+        ArrayList<TransportRequest> transportRequests = new ArrayList<>();
         for(JsonElement jr: transportRequestsObj) {
             JsonObject obj = jr.getAsJsonObject();
 

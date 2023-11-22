@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Stack;
 
 public class Vehicle {
@@ -12,7 +14,7 @@ public class Vehicle {
     private int x,y;
     
     private int time = 0;
-    private Stack<Box> stack = new Stack<>();
+    private HashMap<String, Box> stack = new HashMap<>();
     private ArrayList<TransportRequest> requests = new ArrayList<>();
     private StringBuilder logs;
 
@@ -70,7 +72,7 @@ public class Vehicle {
         logs.append(name+";"+x+";"+y+";"+time+";"+x+";"+y+";"+nextTime+";"+b.getID()+";Load\n");
         time = nextTime;
 
-        stack.push(b);
+        stack.put(b.getID(), b);
     }
 
     public void addBoxes(Stack<Box> boxes) throws Exception {
@@ -79,62 +81,12 @@ public class Vehicle {
             logs.append(name+";"+x+";"+y+";"+time+";"+x+";"+y+";"+nextTime+";"+boxes.toString()+";Load\n");
             time = nextTime;
 
-            stack.addAll(boxes);
+            for(Box b : boxes) stack.put(b.getID(), b);
         }
         else throw new RackException("Vehicle with name " + name + " is too full to fit boxes");
     }
 
-    // Remove to top box from the vehicle
-    public Box removeFirstBox() throws VehicleException{
-        if(stack.size() <= 0){
-            throw new VehicleException("Vehicle with name " + name + " wants to remove a box but has none");
-        }
-        int nextTime = (int)(time + LOADING_TIME);
-        Box b = stack.pop();
-
-        logs.append(name+";"+x+";"+y+";"+time+";"+x+";"+y+";"+nextTime+";"+b.getID()+";Unload\n");
-        time = nextTime;
-        return b;
-    }
     // Remove the boxes one by one (timewise)
-    public Stack<Box> removeBoxesOneByOne(int pos) throws RackException {
-        if(pos > stack.size()) throw new RackException("Not enough elements in rack");
-        
-        Stack<Box> res = new Stack<>();
-        Object[] temp = stack.toArray();
-        for(int i = temp.length - 1 - pos; i < temp.length; i++){
-            res.add((Box) temp[i]);
-            stack.pop();
-            int nextTime = (int)(time + LOADING_TIME);
-            logs.append(name+";"+x+";"+y+";"+time+";"+x+";"+y+";"+nextTime+";"+((Box) temp[i]).getID()+";Unload\n");
-            time = nextTime;
-        }
-
-        return res;
-    }
-    // Remove a full stack of boxes at once
-    public Stack<Box> removeBoxesStacked(int pos) throws RackException {
-        if(pos > stack.size()) throw new RackException("Not enough elements in rack");
-        
-        Stack<Box> res = new Stack<>();
-        Object[] temp = stack.toArray();
-        for(int i = temp.length - 1 - pos; i < temp.length; i++){
-            res.add((Box) temp[i]);
-            stack.pop();
-        }
-
-        int nextTime = (int)(time + LOADING_TIME);
-        logs.append(name+";"+x+";"+y+";"+time+";"+x+";"+y+";"+nextTime+";"+res.toString()+";Unload\n");
-        time = nextTime;
-
-        return res;
-    }
-
-    public int getBoxPosition(Box b){
-        return stack.search(b) - 1;
-    }
-
-
 
     public void addTransportRequest(TransportRequest t){
         requests.add(t);
@@ -159,12 +111,18 @@ public class Vehicle {
         y = storage.y;
     }
 
+    public Box removeBox(String boxId) {
+        Box res = stack.getOrDefault(boxId, null);
+        if(res != null) stack.remove(boxId);
+        else System.out.println(boxId);
+        return res;
+    }
     
     public String toString(){
         StringBuilder sb = new StringBuilder();
         sb.append("--id: "+ name +"-------------------------------------");
         sb.append("\n\t\t Stack:");
-        for (Box box : stack) {
+        for (Box box : stack.values()) {
             sb.append(box.toString() + " | ");
         }
         
