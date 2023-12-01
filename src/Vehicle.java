@@ -16,7 +16,7 @@ public class Vehicle {
     private int time = 0;
     private HashMap<String, Box> stack = new HashMap<>();
     private ArrayList<TransportRequest> requests = new ArrayList<>();
-    private StringBuilder logs;
+    private static StringBuilder logs = new StringBuilder();
 
     public Vehicle(int ID, String name, float SPEED, float LOADING_TIME, int CAPACITY, int x, int y){
         this.ID = ID;
@@ -26,7 +26,6 @@ public class Vehicle {
         this.CAPACITY = CAPACITY;
         this.x = x;
         this.y = y;
-        logs = new StringBuilder();
     }
 
     public int getX(){

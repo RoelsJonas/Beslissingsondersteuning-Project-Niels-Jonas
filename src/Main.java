@@ -16,7 +16,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
 
         // Read data from file
-        String jsonFile = "src/Data/I30_200_3_3_10.json";
+        String jsonFile = "src/Data/I100_120_2_2_8b2.json";
         JsonObject inputfile;
         try {
             inputfile = JsonParser.parseReader(new FileReader(jsonFile)).getAsJsonObject();
@@ -87,7 +87,6 @@ public class Main {
             int capacity = obj.get("capacity").getAsInt();
             int x = obj.get("x").getAsInt();
             int y = obj.get("y").getAsInt();
-
             Vehicle vehicle = new Vehicle(id, name, vehiclespeed, loadingduration, capacity, x, y);
             vehicles.add(vehicle);
         }

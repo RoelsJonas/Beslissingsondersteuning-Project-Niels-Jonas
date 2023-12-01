@@ -4,7 +4,7 @@ import java.util.Stack;
 public class Storage {
     protected int ID;
     protected String name;
-
+    public int requestCount = 0;
     protected int MAX_CAPACITY;
 
     protected int x;

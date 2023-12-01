@@ -17,6 +17,7 @@ public class Warehouse {
     private HashMap<Box, Storage> inventory;
 
     private StringBuilder logs;
+    private HashMap<Rack, Vehicle> vehicleRackMapping = new HashMap<>();
 
     public Warehouse(Vehicle[] vehicles, Rack[] racks, ArrayList<TransportRequest> requests, Buffer[] buffers, int stackcapacity, int vehiclespeed, int loadingduration, Storage[] storages) {
         this.vehicles = vehicles;
@@ -40,6 +41,22 @@ public class Warehouse {
 
     public void processAllRequests() throws Exception{
         Vehicle vehicle = vehicles[0];
+
+        double average = (double) requests.size() / (double) vehicles.length;
+        int i = 0;
+        for(Vehicle v : vehicles) {
+            int sum = 0;
+            while(sum < average && i < racks.length) {
+                vehicleRackMapping.put(racks[i], v);
+                sum += racks[i].requestCount;
+                i++;
+            }
+        }
+
+        for(Rack r : racks) {
+            System.out.println(r.getID() +  ": " + vehicleRackMapping.get(r).getID());
+        }
+
         requests.sort((o1, o2) -> {
             int res = 0;
             if(o1.getDropOffLocation().getClass() != o2.getDropOffLocation().getClass()) {
@@ -61,6 +78,9 @@ public class Warehouse {
 
         while (iterator.hasNext()) {
             TransportRequest request = iterator.next();
+
+            if(request.getPickupLocation().getClass() == Buffer.class) vehicle = vehicleRackMapping.get(request.getDropOffLocation());
+            else vehicle = vehicleRackMapping.get(request.getPickupLocation());
             String boxID = request.getBoxID();
             Storage pickup = request.getPickupLocation();
             Storage drop = request.getDropOffLocation();
@@ -120,21 +140,47 @@ public class Warehouse {
             }
             else {
                 System.out.println("aah"); // TODO WAT ALS STORAGE VAN VEHICLE VOL
-//                int amountToRelocate = boxPos - vehicle.getFreeSpace();
-//                String[] boxIds = new String[amountToRelocate];
-//                String[] rackIds = new String[amountToRelocate];
-//                // We need to relocate boxes
-//                int initialSpace = vehicle.getFreeSpace();
-//                while(vehicle.getFreeSpace() <= storage.getBoxPosition(box)) {
-//                    Stack<Box> boxes = storage.removeBoxes(vehicle.getFreeSpace());
-//                    vehicle.addBoxes(boxes);
-//                    int i = 0;
-//                    while(vehicle.getFreeSpace() != initialSpace) {
-//                        if(racks[i].getFreeSpace() > 0) {
-//
-//                        }
-//                    }
-//                }
+                int amountToRelocate = boxPos - vehicle.getFreeSpace() + 1;
+                String[] boxIds = new String[amountToRelocate];
+                int[] rackIds = new int[amountToRelocate];
+                // We need to relocate boxes
+                int initialSpace = vehicle.getFreeSpace();
+                int j = 0;
+                while(vehicle.getFreeSpace() < storage.getBoxPosition(box)) {
+                    Stack<Box> boxes = storage.removeBoxes(vehicle.getFreeSpace());
+                    vehicle.addBoxes(boxes);
+                    int i = 0;
+                    while(vehicle.getFreeSpace() != initialSpace && i < racks.length) {
+                        if(racks[i].getFreeSpace() > 0 && vehicleRackMapping.get(racks[i]) == vehicle) {
+                            vehicle.drive(racks[i]);
+                            for(Box b : boxes) {
+                                vehicle.removeBox(b.getID());
+                                racks[i].addBox(b);
+                                boxIds[j] = b.getID();
+                                rackIds[j] = i;
+                                j++;
+                                if(racks[i].getFreeSpace() == 0) break;
+                            }
+                        }
+                        i++;
+                    }
+                    vehicle.drive(storage);
+                }
+                Stack<Box> boxes2 = storage.removeBoxes(boxPos);
+                vehicle.addBoxes(boxes2);
+                removeBoxesInventory(boxes2);
+                for(Box b : boxes2) {
+                    if(!b.getID().equals(boxID)) {
+                        storage.addBox(b);
+                        addBoxesInventory(b, storage);
+                    }
+                }
+                for(int i = amountToRelocate - 1; i >= 0; i--) {
+                    vehicle.drive(racks[rackIds[i]]);
+                    vehicle.addBox(racks[rackIds[i]].removeBox(boxIds[i]));
+                    vehicle.drive(storage);
+                    storage.addBox(vehicle.removeBox(boxIds[i]));
+                }
             }
         }
     }
@@ -174,6 +220,10 @@ public class Warehouse {
                 inventory.put(box, rack);
             }
         }
+        for(TransportRequest r : requests) {
+            r.getDropOffLocation().requestCount++;
+            r.getPickupLocation().requestCount++;
+        }
     }
 
     // Because the boxes in the buffers are not given we need to search for those
@@ -185,6 +235,7 @@ public class Warehouse {
                     buffer.addBox(b);
                     inventory.put(b, buffer);
                 }
+
             }
         }
     }
