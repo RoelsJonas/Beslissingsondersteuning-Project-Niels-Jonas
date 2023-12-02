@@ -139,47 +139,61 @@ public class Warehouse {
                 }
             }
             else {
-                System.out.println("aah"); // TODO WAT ALS STORAGE VAN VEHICLE VOL
-                int amountToRelocate = boxPos - vehicle.getFreeSpace() + 1;
-                String[] boxIds = new String[amountToRelocate];
-                int[] rackIds = new int[amountToRelocate];
-                // We need to relocate boxes
+                Box[] rackIds = new Box[racks.length];
                 int initialSpace = vehicle.getFreeSpace();
-                int j = 0;
-                while(vehicle.getFreeSpace() < storage.getBoxPosition(box)) {
-                    Stack<Box> boxes = storage.removeBoxes(vehicle.getFreeSpace());
+
+                // Split all the boxes over ei-xisting racks
+                while(vehicle.getFreeSpace() < storage.getBoxPosition(box) + 1) {
+                    Stack<Box> boxes = storage.removeBoxes(vehicle.getFreeSpace() - 1);
                     vehicle.addBoxes(boxes);
                     int i = 0;
+
                     while(vehicle.getFreeSpace() != initialSpace && i < racks.length) {
-                        if(racks[i].getFreeSpace() > 0 && vehicleRackMapping.get(racks[i]) == vehicle) {
+                        if(racks[i].getFreeSpace() > 0 && vehicleRackMapping.get(racks[i]) == vehicle && racks[i] != storage) {
                             vehicle.drive(racks[i]);
-                            for(Box b : boxes) {
-                                vehicle.removeBox(b.getID());
-                                racks[i].addBox(b);
-                                boxIds[j] = b.getID();
-                                rackIds[j] = i;
-                                j++;
-                                if(racks[i].getFreeSpace() == 0) break;
+                            int boxesToRemove = Math.min(racks[i].getFreeSpace(), initialSpace - vehicle.getFreeSpace());
+                            Stack<Box> toAdd = vehicle.removeBoxes(boxesToRemove);
+                            racks[i].addBoxes(toAdd);
+                             
+                            if(rackIds[i] == null){
+                                rackIds[i] = toAdd.get(toAdd.size() - 1);
                             }
                         }
                         i++;
                     }
+
                     vehicle.drive(storage);
                 }
-                Stack<Box> boxes2 = storage.removeBoxes(boxPos);
-                vehicle.addBoxes(boxes2);
-                removeBoxesInventory(boxes2);
-                for(Box b : boxes2) {
+                
+                // Finnaly add the box to the vehicle
+                boxPos = storage.getBoxPosition(box);
+                Stack<Box> boxes = storage.removeBoxes(boxPos);
+                vehicle.addBoxes(boxes);
+                for(Box b : boxes) {
                     if(!b.getID().equals(boxID)) {
+                        vehicle.removeBox(b.getID());
                         storage.addBox(b);
-                        addBoxesInventory(b, storage);
                     }
                 }
-                for(int i = amountToRelocate - 1; i >= 0; i--) {
-                    vehicle.drive(racks[rackIds[i]]);
-                    vehicle.addBox(racks[rackIds[i]].removeBox(boxIds[i]));
-                    vehicle.drive(storage);
-                    storage.addBox(vehicle.removeBox(boxIds[i]));
+                removeBoxesInventory(box);
+
+                // Relocate the first removed boxes back to the origanal rack
+                for(int i = 0; i < rackIds.length; i++){
+                    Storage s = racks[i];
+                    Box b = rackIds[i];
+
+                    while(true) {
+                        int pos = s.getBoxPosition(b);
+                        if(pos == -2) break;
+
+                        int boxesToRemove = Math.min(vehicle.getFreeSpace(), pos+1);
+                        vehicle.drive(s);
+                        boxes = s.removeBoxes(boxesToRemove - 1);
+                        vehicle.addBoxes(boxes);
+                        vehicle.drive(storage);
+                        vehicle.removeBoxes(boxes);
+                        storage.addBoxes(boxes);
+                    }
                 }
             }
         }

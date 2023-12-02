@@ -116,6 +116,25 @@ public class Vehicle {
         else System.out.println(boxId);
         return res;
     }
+
+    public Stack<Box> removeBoxes(int number) {
+        if(number > stack.size()) throw new IllegalArgumentException("Can't remove more boxes than there are in vehicle " + name);
+
+        Stack<Box> res = new Stack<>();
+        for(int i = 0; i < number; i++) {
+            res.push(stack.remove(stack.keySet().iterator().next()));
+        }
+        return res; 
+    }
+
+    public void removeBoxes(Stack<Box> boxes) {
+        if(boxes.size() > stack.size()) throw new IllegalArgumentException("Can't remove more boxes than there are in vehicle " + name);
+
+        for(Box b : boxes) {
+            stack.remove(b);
+        }
+    }
+    
     
     public String toString(){
         StringBuilder sb = new StringBuilder();
