@@ -16,8 +16,7 @@ public class Vehicle {
     private int time = 0;
     private int driveTime = 0;
     private HashMap<String, Box> stack = new HashMap<>();
-    private ArrayList<TransportRequest> requests = new ArrayList<>();
-    private static StringBuilder logs = new StringBuilder();
+    public static StringBuilder logs = new StringBuilder();
 
     public Vehicle(int ID, String name, float SPEED, float LOADING_TIME, int CAPACITY, int x, int y){
         this.ID = ID;
@@ -98,16 +97,6 @@ public class Vehicle {
         else throw new RackException("Vehicle with name " + name + " is too full to fit boxes");
     }
 
-    // Remove the boxes one by one (timewise)
-
-    public void addTransportRequest(TransportRequest t){
-        requests.add(t);
-    }
-
-    public void removeTransportRequest(int i){
-        requests.remove(i);    
-    }
-
     public int getFreeSpace() {
         return (CAPACITY - stack.size());
     }
@@ -174,11 +163,6 @@ public class Vehicle {
         sb.append("\n\t\t Stack:");
         for (Box box : stack.values()) {
             sb.append(box.toString() + " | ");
-        }
-        
-        sb.append("\n\t\t Requests:");
-        for (TransportRequest request : requests) {
-            sb.append("\t\t\t" + request.toString());
         }
 
         return sb.toString();
