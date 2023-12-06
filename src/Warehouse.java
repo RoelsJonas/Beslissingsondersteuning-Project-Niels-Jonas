@@ -75,7 +75,7 @@ public class Warehouse {
         int temp = 0;
         for(Rack r : racks) {
             if(vehicleRackMapping.get(r) == null) vehicleRackMapping.put(r, vehicles[temp++%vehicles.length]);
-            System.out.println(r.getID() +  ": " + vehicleRackMapping.get(r).getID());
+            if(Main.debug) System.out.println(r.getID() +  ": " + vehicleRackMapping.get(r).getID());
         }
 
         requests.sort((o1, o2) -> {
@@ -92,8 +92,6 @@ public class Warehouse {
             Storage s2 = inventory.get(b2);
             return s1.getBoxPosition(b1) - s2.getBoxPosition(b2);
         });
-
-        System.out.println(this);
 
         for (TransportRequest request : requests) {
             Storage pickup = request.getPickupLocation();
@@ -124,8 +122,6 @@ public class Warehouse {
 
             vehicle.removeTransportRequest(0);
         }
-
-        System.out.println(this);
 
         logs.append(vehicle.getLogs());
         
