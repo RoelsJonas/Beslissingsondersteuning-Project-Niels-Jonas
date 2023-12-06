@@ -30,7 +30,7 @@ public class Rack extends Storage{
         Stack<Box> res = new Stack<>();
         Object[] temp = stack.toArray();
         for(int i = temp.length - 1 - pos; i < temp.length; i++) {
-            res.add((Box) temp[i]);
+            res.add((Box) temp[i]); // TODO DIT KAN ANDERS AANGEZIEN VEHICLES NIET LIFO ZIJN
             stack.pop();
         }
         return res;

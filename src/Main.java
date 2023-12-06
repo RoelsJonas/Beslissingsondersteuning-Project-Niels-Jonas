@@ -16,10 +16,16 @@ public class Main {
     public static void main(String[] args) throws Exception {
 
         // Read data from file
-        String jsonFile = "src/Data/I100_120_2_2_8b2.json";
+        String jsonFile = "I100_120_2_2_8b2";
+//        String jsonFile = "I100_50_2_2_8b2";
+//        String jsonFile = "I30_200_3_3_10";
+//        String jsonFile = "I30_100_3_3_10";
+//        String jsonFile = "I30_100_1_1_10";
+//        String jsonFile = "I20_20_2_2_8b2";
+//        String jsonFile = "I3_3_1_5";
         JsonObject inputfile;
         try {
-            inputfile = JsonParser.parseReader(new FileReader(jsonFile)).getAsJsonObject();
+            inputfile = JsonParser.parseReader(new FileReader("src/Data/" + jsonFile + ".json")).getAsJsonObject();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -119,7 +125,7 @@ public class Main {
             transportRequests.add(transportRequest);
         }
 
-        Warehouse w = new Warehouse(vehicles.toArray(Vehicle[]::new), racks.toArray(Rack[]::new), transportRequests, buffers.toArray(Buffer[]::new), stackcapacity, vehiclespeed, loadingduration, storages);
+        Warehouse w = new Warehouse(vehicles.toArray(Vehicle[]::new), racks.toArray(Rack[]::new), transportRequests, buffers.toArray(Buffer[]::new), stackcapacity, vehiclespeed, loadingduration, storages, jsonFile);
 
         System.out.println(w);
 

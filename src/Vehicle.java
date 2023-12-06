@@ -11,9 +11,10 @@ public class Vehicle {
     private float LOADING_TIME;
     private int CAPACITY;
     
-    private int x,y;
+    private int x,y, prevX, prevY;
     
     private int time = 0;
+    private int driveTime = 0;
     private HashMap<String, Box> stack = new HashMap<>();
     private ArrayList<TransportRequest> requests = new ArrayList<>();
     private static StringBuilder logs = new StringBuilder();
@@ -67,8 +68,11 @@ public class Vehicle {
             throw new VehicleException("Vehicle with name " + name + " can't fit any more boxes but wants to add more");
         }
 
-        int nextTime = (int)(time + LOADING_TIME);
-        logs.append(name+";"+x+";"+y+";"+time+";"+x+";"+y+";"+nextTime+";"+b.getID()+";Load\n");
+        Warehouse.totalDriveTime += driveTime;
+        Warehouse.totalLoadTime += LOADING_TIME;
+        int nextTime = (int)(time + LOADING_TIME + driveTime);
+        driveTime = 0;
+        logs.append(name+";"+prevX+";"+prevY+";"+time+";"+x+";"+y+";"+nextTime+";"+b.getID()+";PU\n");
         time = nextTime;
 
         stack.put(b.getID(), b);
@@ -76,11 +80,18 @@ public class Vehicle {
 
     public void addBoxes(Stack<Box> boxes) throws Exception {
         if(stack.size() + boxes.size() <= CAPACITY) {
-            int nextTime = (int)(time + LOADING_TIME);
-            logs.append(name+";"+x+";"+y+";"+time+";"+x+";"+y+";"+nextTime+";"+boxes.toString()+";Load\n");
-            time = nextTime;
+            for(Box b : boxes) {
+                stack.put(b.getID(), b);
 
-            for(Box b : boxes) stack.put(b.getID(), b);
+                Warehouse.totalDriveTime += driveTime;
+                Warehouse.totalLoadTime += LOADING_TIME;
+                int nextTime = (int)(time + LOADING_TIME + driveTime);
+                logs.append(name+";"+prevX+";"+prevY+";"+time+";"+x+";"+y+";"+nextTime+";"+b.getID()+";PU\n");
+                time = nextTime;
+                driveTime = 0;
+                prevX = x;
+                prevY = y;
+            }
         }
         else throw new RackException("Vehicle with name " + name + " is too full to fit boxes");
     }
@@ -101,19 +112,29 @@ public class Vehicle {
 
 
     public void drive(Storage storage){
-        float distance = Math.abs(storage.x - x) + Math.abs(storage.y - y);
-        int nextTime = (int)(time + distance / SPEED);
-        logs.append(name+";"+x+";"+y+";"+time+";"+storage.x+";"+storage.y+";"+nextTime+";None;Drive\n");
-
-        time = nextTime;
+        prevX = x;
+        prevY = y;
+        int distance = Math.abs(storage.x - x) + Math.abs(storage.y - y);
+//        int nextTime = (int)(time + distance / SPEED);
+//        logs.append(name+";"+x+";"+y+";"+time+";"+storage.x+";"+storage.y+";"+nextTime+";None;Drive\n");
+        driveTime = (int) (distance / SPEED);
+//        time = nextTime;
         x = storage.x;
         y = storage.y;
     }
 
     public Box removeBox(String boxId) {
+
         Box res = stack.getOrDefault(boxId, null);
         if(res != null) stack.remove(boxId);
         else System.out.println(boxId);
+
+        Warehouse.totalDriveTime += driveTime;
+        Warehouse.totalLoadTime += LOADING_TIME;
+        int nextTime = (int)(time + LOADING_TIME + driveTime);
+        driveTime = 0;
+        logs.append(name+";"+prevX+";"+prevY+";"+time+";"+x+";"+y+";"+nextTime+";"+boxId+";PL\n");
+        time = nextTime;
         return res;
     }
 
@@ -123,6 +144,15 @@ public class Vehicle {
         Stack<Box> res = new Stack<>();
         for(int i = 0; i < number; i++) {
             res.push(stack.remove(stack.keySet().iterator().next()));
+
+            Warehouse.totalDriveTime += driveTime;
+            Warehouse.totalLoadTime += LOADING_TIME;
+            int nextTime = (int)(time + LOADING_TIME + driveTime);
+            driveTime = 0;
+            logs.append(name+";"+prevX+";"+prevY+";"+time+";"+x+";"+y+";"+nextTime+";"+res.peek().getID()+";PL\n");
+            time = nextTime;
+            prevX = x;
+            prevY = y;
         }
         return res; 
     }

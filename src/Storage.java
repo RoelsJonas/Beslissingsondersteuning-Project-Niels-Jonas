@@ -1,4 +1,5 @@
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Stack;
 
 public class Storage {
@@ -39,6 +40,19 @@ public class Storage {
     
     public int getFreeSpace() {return 0;}
     public int getBoxPosition(Box b) {return 0;}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Storage storage = (Storage) o;
+        return ID == storage.ID;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(ID);
+    }
 
     public boolean equals(Storage s){
         return name.equals(s.name);

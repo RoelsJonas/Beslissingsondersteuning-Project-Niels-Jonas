@@ -56,8 +56,8 @@
       "ID": 0,
       "name": "Vehicle0",
       "capacity": 5,
-      "xCoordinate": 100,
-      "yCoordinate": 100
+      "x": 100,
+      "y": 100
     }
   ],
   "requests": [
