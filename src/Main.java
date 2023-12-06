@@ -135,5 +135,6 @@ public class Main {
 
         w.processAllRequests();
         w.validateWarehouse();
+
     }
 }

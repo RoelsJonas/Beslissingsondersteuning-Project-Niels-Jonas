@@ -1,6 +1,7 @@
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.util.*;
 
 public class Warehouse {
@@ -93,38 +94,18 @@ public class Warehouse {
             return s1.getBoxPosition(b1) - s2.getBoxPosition(b2);
         });
 
-        for (TransportRequest request : requests) {
-            Storage pickup = request.getPickupLocation();
-            Storage drop = request.getDropOffLocation();
-            if (pickup.getClass() == Buffer.class) {
-                vehicle = vehicleRackMapping.get(drop);
-            }
-            else {
-                vehicle = vehicleRackMapping.get(inventory.get(new Box(request.getBoxID())));
-                pickup = inventory.get(new Box(request.getBoxID()));
-            }
-            String boxID = request.getBoxID();
+//        for (TransportRequest request : requests) {
+//            executeRequest(request);
+//        }
 
-            vehicle.addTransportRequest(request);
+        Iterator<TransportRequest> iterator = requests.iterator();
 
-            if(drop.getFreeSpace() == 0) {
-                vehicle.drive(drop);
-
-            }
-
-            // Load the box
-            vehicle.drive(pickup);
-            pickUpBox(vehicle.getID(), pickup, boxID);
-
-            // Unload the box
-            vehicle.drive(drop);
-            dropOffBox(vehicle.getID(), drop, boxID);
-
-            vehicle.removeTransportRequest(0);
+        while(iterator.hasNext()) {
+            executeRequest(iterator);
         }
 
-        logs.append(vehicle.getLogs());
-        
+        logs.append(Vehicle.logs);
+
         // Write logs
         String logContent = logs.toString();
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/Solutions/logs_"+fileName+".txt"))) {
@@ -132,6 +113,43 @@ public class Warehouse {
         } catch (IOException e) {
             System.err.println("Error writing logs to file: " + e.getMessage());
         }
+    }
+
+    private void executeRequest(Iterator<TransportRequest> iterator) throws Exception {
+        TransportRequest request = iterator.next();
+        Vehicle vehicle;
+        Storage pickup = request.getPickupLocation();
+        Storage drop = request.getDropOffLocation();
+        if (pickup.getClass() == Buffer.class) {
+            vehicle = vehicleRackMapping.get(drop);
+        } else {
+            vehicle = vehicleRackMapping.get(inventory.get(new Box(request.getBoxID())));
+            pickup = inventory.get(new Box(request.getBoxID()));
+        }
+        String boxID = request.getBoxID();
+
+
+        if (drop.getFreeSpace() == 0) {
+            vehicle.drive(drop);
+        }
+
+        // Load the box
+        vehicle.drive(pickup);
+        pickUpBox(vehicle.getID(), pickup, boxID);
+
+        // TODO CHECK IF WE HAVE SPACE AND CAN PICKUP MORE BOXES FROM THIS BUFFERPOINT
+//         executeRequest(request.next());
+        // TODO GERAAKT ER NOOIT IN
+        if(vehicle.getFreeSpace() > 0 && pickup.getClass() == Buffer.class && iterator.hasNext()) {
+            executeRequest(iterator);
+            System.out.println("AAH");;
+        }
+
+
+
+        // Unload the box
+        vehicle.drive(drop);
+        dropOffBox(vehicle.getID(), drop, boxID);
     }
 
     // Pickup a box from a Buffer or Rack and load it onto a vehicle
