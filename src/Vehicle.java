@@ -25,6 +25,8 @@ public class Vehicle {
         this.SPEED = SPEED;
         this.LOADING_TIME = LOADING_TIME;
         this.CAPACITY = CAPACITY;
+        this.prevX = x;
+        this.prevY = y;
         this.x = x;
         this.y = y;
     }

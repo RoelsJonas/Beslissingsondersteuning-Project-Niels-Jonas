@@ -18,13 +18,19 @@ public class Warehouse {
 
     private StringBuilder logs;
     private HashMap<Rack, Vehicle> vehicleRackMapping = new HashMap<>();
+    private HashSet<Box> keep = new HashSet<>();
+    private String fileName;
 
-    public Warehouse(Vehicle[] vehicles, Rack[] racks, ArrayList<TransportRequest> requests, Buffer[] buffers, int stackcapacity, int vehiclespeed, int loadingduration, Storage[] storages) {
+    static int totalDriveTime;
+    static int totalLoadTime;
+
+    public Warehouse(Vehicle[] vehicles, Rack[] racks, ArrayList<TransportRequest> requests, Buffer[] buffers, int stackcapacity, int vehiclespeed, int loadingduration, Storage[] storages, String fileName) {
         this.vehicles = vehicles;
         this.racks = racks;
         this.requests = requests;
         this.buffers = buffers;
         this.storages = storages;
+        this.fileName = fileName;
         logs = new StringBuilder();
         logs.append("%vehicle;startx;starty;starttime;endx;endy;endtime;box;operation\n");
 
@@ -125,7 +131,7 @@ public class Warehouse {
         
         // Write logs
         String logContent = logs.toString();
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/Solutions/logs2.txt"))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/Solutions/logs_"+fileName+".txt"))) {
             writer.write(logContent);
         } catch (IOException e) {
             System.err.println("Error writing logs to file: " + e.getMessage());
@@ -315,6 +321,9 @@ public class Warehouse {
         else{
             System.out.println("Found " + wrongs + "/"+ requests.size() + " boxes that are not located in the right storage");
         }
+
+        System.out.println("TOTAL DRIVETIME: " + totalDriveTime);
+        System.out.println("TOTAL LOADTIME: " + totalLoadTime);
     }
 
     public String toString() {

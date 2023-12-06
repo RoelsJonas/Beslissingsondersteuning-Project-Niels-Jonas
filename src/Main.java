@@ -13,6 +13,8 @@ import javax.lang.model.type.ArrayType;
 
 public class Main {
 
+    static boolean debug = false;
+
     public static void main(String[] args) throws Exception {
 
         // Read data from file
@@ -127,7 +129,9 @@ public class Main {
 
         Warehouse w = new Warehouse(vehicles.toArray(Vehicle[]::new), racks.toArray(Rack[]::new), transportRequests, buffers.toArray(Buffer[]::new), stackcapacity, vehiclespeed, loadingduration, storages, jsonFile);
 
-        System.out.println(w);
+        if(debug){
+            System.out.println(w);
+        }
 
         w.processAllRequests();
         w.validateWarehouse();
