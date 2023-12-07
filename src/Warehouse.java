@@ -104,6 +104,8 @@ public class Warehouse {
             executeRequest(iterator);
         }
 
+        System.out.println(this);
+
         logs.append(Vehicle.logs);
 
         // Write logs
@@ -137,14 +139,12 @@ public class Warehouse {
         vehicle.drive(pickup);
         pickUpBox(vehicle.getID(), pickup, boxID);
 
-        // TODO CHECK IF WE HAVE SPACE AND CAN PICKUP MORE BOXES FROM THIS BUFFERPOINT
-//         executeRequest(request.next());
-        // TODO GERAAKT ER NOOIT IN
-        if(vehicle.getFreeSpace() > 0 && pickup.getClass() == Buffer.class && iterator.hasNext()) {
-            executeRequest(iterator);
-            System.out.println("AAH");;
+        // If we are picking up a box from a buffer we might be able to take another so we check for capacity
+        if(pickup.getClass() == Buffer.class) {
+            if (vehicle.getFreeSpace() > 0 && iterator.hasNext()) {
+                executeRequest(iterator);
+            }
         }
-
 
 
         // Unload the box
@@ -174,6 +174,7 @@ public class Warehouse {
                 removeBoxesInventory(boxes);
                 for(Box b : boxes) {
                     if(!b.getID().equals(boxID)) {
+                        vehicle.removeBox(b.getID());
                         storage.addBox(b);
                         addBoxesInventory(b, storage);
                     }
@@ -225,26 +226,6 @@ public class Warehouse {
                     }
                 }
                 removeBoxesInventory(box);
-
-                // TODO IS DIT NOODZAKELIJK AANGEZIEN WE ONZE INVENTORY BIJHOUDEN
-                // Relocate the first removed boxes back to the original rack
-//                for(int i = 0; i < rackIds.length; i++){
-//                    Storage s = racks[i];
-//                    Box b = rackIds[i];
-//                    System.out.println("Starting loop: ");
-//                    while(true) {
-//                        int pos = s.getBoxPosition(b);
-//                        if(pos == -2) break;
-//
-//                        int boxesToRemove = Math.min(vehicle.getFreeSpace(), pos+1);
-//                        vehicle.drive(s);
-//                        boxes = s.removeBoxes(boxesToRemove - 1);
-//                        vehicle.addBoxes(boxes);
-//                        vehicle.drive(storage);
-//                        vehicle.removeBoxes(boxes);
-//                        storage.addBoxes(boxes);
-//                    }
-//                }
             }
         }
     }
