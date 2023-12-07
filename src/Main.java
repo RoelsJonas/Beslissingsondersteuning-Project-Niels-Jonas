@@ -2,18 +2,14 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Stack;
 import java.util.stream.Stream;
 
 import com.google.gson.*;
 
-import javax.lang.model.type.ArrayType;
-
 public class Main {
 
-    static boolean debug = false;
+    static boolean DEBUG = false;
 
     public static void main(String[] args) throws Exception {
 
@@ -67,7 +63,6 @@ public class Main {
         // Read bufferpoints data
         JsonArray buffersObj = inputfile.getAsJsonArray("bufferpoints");
         ArrayList<Buffer> buffers = new ArrayList<>();
-        int bufferIndex = 0;
         for(JsonElement jr: buffersObj) {
             if(jr instanceof JsonNull) break;
             JsonObject obj = jr.getAsJsonObject();
@@ -84,17 +79,16 @@ public class Main {
         // Read vehicles data
         JsonArray vehiclesObj = inputfile.getAsJsonArray("vehicles");
         ArrayList<Vehicle> vehicles = new ArrayList<>();
-        int vehicleIndex = 0;
         for(JsonElement jr: vehiclesObj) {
             if(jr instanceof JsonNull) break;
             JsonObject obj = jr.getAsJsonObject();
-
 
             int id = obj.get("ID").getAsInt();
             String name = obj.get("name").getAsString();
             int capacity = obj.get("capacity").getAsInt();
             int x = obj.get("x").getAsInt();
             int y = obj.get("y").getAsInt();
+
             Vehicle vehicle = new Vehicle(id, name, vehiclespeed, loadingduration, capacity, x, y);
             vehicles.add(vehicle);
         }
@@ -129,12 +123,10 @@ public class Main {
 
         Warehouse w = new Warehouse(vehicles.toArray(Vehicle[]::new), racks.toArray(Rack[]::new), transportRequests, buffers.toArray(Buffer[]::new), stackcapacity, vehiclespeed, loadingduration, storages, jsonFile);
 
-        if(debug){
-            System.out.println(w);
-        }
+        if(DEBUG) System.out.println(w);
+
 
         w.processAllRequests();
         w.validateWarehouse();
-
     }
 }
