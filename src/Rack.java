@@ -1,9 +1,8 @@
-import java.util.HashSet;
 import java.util.Stack;
 
 public class Rack extends Storage{
 
-    private Stack<Box> stack;
+    private final Stack<Box> stack;
 
     public Rack(int ID, String name, int x, int y, int MAX_CAPACITY){
         super(ID, name, x, y, MAX_CAPACITY);

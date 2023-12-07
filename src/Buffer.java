@@ -4,7 +4,7 @@ import java.util.Stack;
 
 public class Buffer extends Storage{
 
-    HashSet<Box> boxes;
+    private final HashSet<Box> boxes;
 
     public Buffer(int ID, String name, int x, int y) {
         super(ID, name, x, y, Integer.MAX_VALUE);

@@ -1,7 +1,6 @@
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.SQLOutput;
 import java.util.*;
 
 public class Warehouse {
@@ -11,19 +10,19 @@ public class Warehouse {
     private final int LOADING_TIME;
 
     private final Storage[] storages;
-    private Buffer[] buffers;
-    private Rack[] racks;
-    private Vehicle[] vehicles;
-    private ArrayList<TransportRequest> requests;
-    private HashMap<Box, Storage> inventory;
+    private final Buffer[] buffers;
+    private final Rack[] racks;
+    private final Vehicle[] vehicles;
+    private final ArrayList<TransportRequest> requests;
+    private final HashMap<Box, Storage> inventory;
 
-    private StringBuilder logs;
-    private HashMap<Rack, Vehicle> vehicleRackMapping = new HashMap<>();
-    private HashSet<Box> keep = new HashSet<>();
-    private String fileName;
+    private final StringBuilder logs;
+    private final HashMap<Rack, Vehicle> vehicleRackMapping = new HashMap<>();
+    private final String fileName;
 
-    static int totalDriveTime;
-    static int totalLoadTime;
+    protected static int totalDriveTime;
+    protected static int totalLoadTime;
+    protected static int relocationTime;
 
     public Warehouse(Vehicle[] vehicles, Rack[] racks, ArrayList<TransportRequest> requests, Buffer[] buffers, int stackcapacity, int vehiclespeed, int loadingduration, Storage[] storages, String fileName) {
         this.vehicles = vehicles;
@@ -47,7 +46,7 @@ public class Warehouse {
     }
 
     public void processAllRequests() throws Exception{
-        Vehicle vehicle = null;
+        // Calculate the cost for all transport requests to and from a rack (without any relocations)
         int totalCost = 0;
         HashMap<Storage, Integer> rackCosts =  new HashMap<>();
         for(TransportRequest r : requests) {
@@ -63,6 +62,7 @@ public class Warehouse {
             }
         }
 
+        // Allocate racks to each vehicle so that each vehicle has an equal cost for all transport requests to and from it's assigned racks
         double average = (double) totalCost / (double) vehicles.length;
         int i = 0;
         for(Vehicle v : vehicles) {
@@ -79,12 +79,18 @@ public class Warehouse {
             if(Main.DEBUG) System.out.println(r.getID() +  ": " + vehicleRackMapping.get(r).getID());
         }
 
-        // Sort requests such that we first move boxes to the bufferpoint with the boxes at the top of stacks coming first
+        // Sort requests such that we first move boxes to the buffer points, grouped by stacks and with the boxes at the top of stacks coming first
         requests.sort((o1, o2) -> {
             if(o1.getDropOffLocation().getClass() != o2.getDropOffLocation().getClass()) {
                 if(o1.getDropOffLocation().getClass() == Buffer.class) return -1;
                 else return 1;
             }
+
+            if(o1.getPickupLocation().getClass() == Rack.class) {
+                if(o1.getPickupLocation().getID() != o2.getPickupLocation().getID())
+                    return o1.getPickupLocation().getID() - o2.getPickupLocation().getID();
+            }
+
             String id1 = o1.getBoxID();
             String id2 = o2.getBoxID();
             Box b1 = new Box(id1);
@@ -100,11 +106,8 @@ public class Warehouse {
             executeRequest(iterator);
         }
 
-        System.out.println(this);
-
-        logs.append(Vehicle.logs);
-
         // Write logs
+        logs.append(Vehicle.logs);
         String logContent = logs.toString();
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/Solutions/logs_"+fileName+".txt"))) {
             writer.write(logContent);
@@ -173,6 +176,7 @@ public class Warehouse {
         int initialSpace = vehicle.getFreeSpace();
 
         // Split all the boxes over existing racks
+        int startTime = vehicle.getTime();
         while(vehicle.getFreeSpace() < storage.getBoxPosition(box) + 1) {
             Stack<Box> boxes = storage.removeBoxes(vehicle.getFreeSpace() - 1);
             vehicle.addBoxes(boxes);
@@ -202,6 +206,8 @@ public class Warehouse {
 
             vehicle.drive(storage);
         }
+        int endTime = vehicle.getTime() + vehicle.getDriveTime();
+        relocationTime += endTime - startTime;
 
         // Finnaly add the box to the vehicle
         boxPos = storage.getBoxPosition(box);
@@ -278,7 +284,6 @@ public class Warehouse {
         for(TransportRequest r : requests) {
             r.getDropOffLocation().requestCount++;
             r.getPickupLocation().requestCount++;
-            keep.add(new Box(r.getBoxID()));
         }
     }
 
@@ -324,8 +329,9 @@ public class Warehouse {
             System.out.println("Found " + wrongs + "/"+ requests.size() + " boxes that are not located in the right storage");
         }
 
-        System.out.println("TOTAL DRIVETIME: " + totalDriveTime);
-        System.out.println("TOTAL LOADTIME: " + totalLoadTime);
+        System.out.println("TOTAL DRIVE TIME: " + totalDriveTime);
+        System.out.println("TOTAL LOAD TIME: " + totalLoadTime);
+        System.out.println("TOTAL RELOCATION TIME: " + relocationTime);
     }
 
     public String toString() {

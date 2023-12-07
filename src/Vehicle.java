@@ -1,21 +1,19 @@
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Stack;
 
 public class Vehicle {
-    private int ID;
-    private String name;
+    private final int ID;
+    private final String name;
     
-    private float SPEED;
-    private float LOADING_TIME;
-    private int CAPACITY;
+    private final float SPEED;
+    private final float LOADING_TIME;
+    private final int CAPACITY;
     
     private int x,y, prevX, prevY;
     
     private int time = 0;
     private int driveTime = 0;
-    private HashMap<String, Box> stack = new HashMap<>();
+    private final HashMap<String, Box> stack = new HashMap<>();
     public static StringBuilder logs = new StringBuilder();
 
     public Vehicle(int ID, String name, float SPEED, float LOADING_TIME, int CAPACITY, int x, int y){
@@ -102,14 +100,15 @@ public class Vehicle {
     }
 
 
+    public int getDriveTime() {
+        return driveTime;
+    }
+
     public void drive(Storage storage){
         prevX = x;
         prevY = y;
         int distance = Math.abs(storage.x - x) + Math.abs(storage.y - y);
-//        int nextTime = (int)(time + distance / SPEED);
-//        logs.append(name+";"+x+";"+y+";"+time+";"+storage.x+";"+storage.y+";"+nextTime+";None;Drive\n");
         driveTime = (int) (distance / SPEED);
-//        time = nextTime;
         x = storage.x;
         y = storage.y;
     }

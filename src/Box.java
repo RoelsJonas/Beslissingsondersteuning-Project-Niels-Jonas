@@ -1,7 +1,7 @@
 import java.util.Objects;
 
 public class Box {
-    private String ID;
+    private final String ID;
 
     public Box(String ID) {
         this.ID = ID;
