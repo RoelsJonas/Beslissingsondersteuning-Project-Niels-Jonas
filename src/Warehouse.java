@@ -4,12 +4,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class Warehouse {
-    // Constants:
-    private final int STACK_CAPACITY;
-    private final int VEHICLE_SPEED;
-    private final int LOADING_TIME;
-
-    private final Storage[] storages;
+    
     private final Buffer[] buffers;
     private final Rack[] racks;
     private final Vehicle[] vehicles;
@@ -24,20 +19,14 @@ public class Warehouse {
     protected static int totalLoadTime;
     protected static int relocationTime;
 
-    public Warehouse(Vehicle[] vehicles, Rack[] racks, ArrayList<TransportRequest> requests, Buffer[] buffers, int stackcapacity, int vehiclespeed, int loadingduration, Storage[] storages, String fileName) {
+    public Warehouse(Vehicle[] vehicles, Rack[] racks, ArrayList<TransportRequest> requests, Buffer[] buffers, String fileName) {
         this.vehicles = vehicles;
         this.racks = racks;
         this.requests = requests;
         this.buffers = buffers;
-        this.storages = storages;
         this.fileName = fileName;
         logs = new StringBuilder();
         logs.append("%vehicle;startx;starty;starttime;endx;endy;endtime;box;operation\n");
-
-        // Set constants
-        STACK_CAPACITY = stackcapacity;
-        VEHICLE_SPEED = vehiclespeed;
-        LOADING_TIME = loadingduration;
 
         // Setup inventory and buffers
         inventory = new HashMap<>();

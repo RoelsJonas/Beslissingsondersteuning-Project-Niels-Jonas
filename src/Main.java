@@ -121,7 +121,7 @@ public class Main {
             transportRequests.add(transportRequest);
         }
 
-        Warehouse w = new Warehouse(vehicles.toArray(Vehicle[]::new), racks.toArray(Rack[]::new), transportRequests, buffers.toArray(Buffer[]::new), stackcapacity, vehiclespeed, loadingduration, storages, jsonFile);
+        Warehouse w = new Warehouse(vehicles.toArray(Vehicle[]::new), racks.toArray(Rack[]::new), transportRequests, buffers.toArray(Buffer[]::new), jsonFile);
 
         if(DEBUG) System.out.println(w);
 
