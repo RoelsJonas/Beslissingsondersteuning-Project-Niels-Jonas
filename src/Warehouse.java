@@ -98,7 +98,7 @@ public class Warehouse {
         // Write logs
         logs.append(Vehicle.logs);
         String logContent = logs.toString();
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/Solutions/logs_"+fileName+".txt"))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
             writer.write(logContent);
         } catch (IOException e) {
             System.err.println("Error writing logs to file: " + e.getMessage());
@@ -318,6 +318,7 @@ public class Warehouse {
             System.out.println("Found " + wrongs + "/"+ requests.size() + " boxes that are not located in the right storage");
         }
 
+        System.out.println("TOTAL TIME: " + (totalDriveTime + totalLoadTime));
         System.out.println("TOTAL DRIVE TIME: " + totalDriveTime);
         System.out.println("TOTAL LOAD TIME: " + totalLoadTime);
         System.out.println("TOTAL RELOCATION TIME: " + relocationTime);
