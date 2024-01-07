@@ -12,18 +12,34 @@ public class Main {
     static boolean DEBUG = false;
 
     public static void main(String[] args) throws Exception {
-
         // Read data from file
-        String jsonFile = "I100_120_2_2_8b2";
+        String jsonFile = "I100_800_3_1_20b2";
+//        String jsonFile = "I100_800_1_1_20b2";
+//        String jsonFile = "I100_500_3_5_20";
+//        String jsonFile = "I100_500_3_1_20b2";
+//        String jsonFile = "I100_120_2_2_8b2";
 //        String jsonFile = "I100_50_2_2_8b2";
 //        String jsonFile = "I30_200_3_3_10";
 //        String jsonFile = "I30_100_3_3_10";
 //        String jsonFile = "I30_100_1_1_10";
 //        String jsonFile = "I20_20_2_2_8b2";
+//        String jsonFile = "I15_16_1_3";
+//        String jsonFile = "I10_10_1";
 //        String jsonFile = "I3_3_1_5";
+//        String jsonFile = "I3_3_1";
+
+
+        String filePath = "src/Data/" + jsonFile + ".json";
+        String outputPath = "src/Solutions/logs_"+jsonFile+".txt";
+        if(args.length > 0) filePath= args[0];
+        if(args.length > 1) outputPath = args[1];
+        if(args.length > 2) DEBUG = Boolean.parseBoolean(args[2]);
+
+
         JsonObject inputfile;
+
         try {
-            inputfile = JsonParser.parseReader(new FileReader("src/Data/" + jsonFile + ".json")).getAsJsonObject();
+            inputfile = JsonParser.parseReader(new FileReader(filePath)).getAsJsonObject();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -121,12 +137,14 @@ public class Main {
             transportRequests.add(transportRequest);
         }
 
-        Warehouse w = new Warehouse(vehicles.toArray(Vehicle[]::new), racks.toArray(Rack[]::new), transportRequests, buffers.toArray(Buffer[]::new), jsonFile);
+        Warehouse w = new Warehouse(vehicles.toArray(Vehicle[]::new), racks.toArray(Rack[]::new), transportRequests, buffers.toArray(Buffer[]::new), outputPath);
 
         if(DEBUG) System.out.println(w);
 
-
+        long startTime= System.nanoTime();
         w.processAllRequests();
-        w.validateWarehouse();
+        if(DEBUG) System.out.println("Time: "  + (System.nanoTime() - startTime));
+        if(DEBUG) w.validateWarehouse();
+        if(DEBUG) w.validateWarehouse();
     }
 }
